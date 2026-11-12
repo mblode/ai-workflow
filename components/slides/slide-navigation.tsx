@@ -13,7 +13,6 @@ import { MotionConfig } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { PRELOAD_SRCS } from "@/lib/assets";
 import { deckIsStill } from "@/lib/motion";
 import { BASE_PATH } from "@/lib/site-url";
 import type { Palette } from "@/lib/slides";
@@ -65,10 +64,12 @@ const INTERACTIVE = "a, button, input, label, select, textarea, [data-slide-nav]
 // entrance, as in Keynote. A reload starts the talk fresh.
 const enteredSlides = new Set<number>();
 
-// The navigation remounts with every slide, so warm the art and the routes
-// once per page load, not once per slide.
-let warmed = false;
+// The navigation remounts with every slide, so prefetch the routes once per
+// page load, not once per slide.
 let prefetched = false;
+
+// A click this soon after the window regains focus is the click that focused it.
+const FOCUS_CLICK_MS = 300;
 
 export function SlideNavigation({
   currentSlide,
@@ -125,6 +126,10 @@ export function SlideNavigation({
           break;
         }
         case "first": {
+          // Going back arrives built, as `prev` does.
+          if (currentSlide > 1) {
+            showNextSlideBuilt();
+          }
           goToSlide(1);
           break;
         }
@@ -137,6 +142,9 @@ export function SlideNavigation({
           break;
         }
         case "goto": {
+          if (command.slide < currentSlide) {
+            showNextSlideBuilt();
+          }
           goToSlide(command.slide);
           break;
         }
@@ -162,7 +170,7 @@ export function SlideNavigation({
   );
 
   // A slide already seen arrives built, and so does every slide in a presenter
-  // preview, with reduced motion, or on a phone: motion skips each animation
+  // preview or with reduced motion: motion skips each animation
   // to its end. Read once per slide, before its entrance can start.
   const arriveBuilt = useMemo(
     () => deckIsStill() || enteredSlides.has(currentSlide),
@@ -183,20 +191,6 @@ export function SlideNavigation({
     showNextSlideBuilt(false);
     enteredSlides.add(currentSlide);
   }, [currentSlide]);
-
-  // Warm every sticker and photo once, so no slide waits on venue wifi. The
-  // presenter's previews are the deck in iframes, and don't need to.
-  useEffect(() => {
-    if (warmed || window.self !== window.top) {
-      return;
-    }
-    warmed = true;
-    for (const src of PRELOAD_SRCS) {
-      const image = new Image();
-      image.decoding = "async";
-      image.src = src;
-    }
-  }, []);
 
   // Every slide, not just the neighbours: a jump never waits on venue wifi.
   // The presenter's previews are the deck in iframes, and don't need to.
@@ -220,8 +214,16 @@ export function SlideNavigation({
       }
     };
     // Clicking anywhere on the slide advances, as in presentation mode elsewhere.
-    // While blanked, a click anywhere brings the slide back.
+    // While blanked, a click anywhere brings the slide back. The click that
+    // brings focus back from another app (Teams) only focuses.
+    let focusedAt = 0;
+    const onFocus = () => {
+      focusedAt = performance.now();
+    };
     const onClick = (event: MouseEvent) => {
+      if (performance.now() - focusedAt < FOCUS_CLICK_MS) {
+        return;
+      }
       const target = event.target instanceof Element ? event.target : null;
       const onSlide = target?.closest(".slide") && !target.closest(INTERACTIVE);
       if (event.button === 0 && (blankRef.current || onSlide)) {
@@ -229,9 +231,11 @@ export function SlideNavigation({
       }
     };
     window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("focus", onFocus);
     window.addEventListener("click", onClick);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("focus", onFocus);
       window.removeEventListener("click", onClick);
     };
   }, [run]);
@@ -329,7 +333,7 @@ export function SlideNavigation({
           {totalSlides}
         </span>
         <Button
-          aria-label="Next slide"
+          aria-label="Next"
           className="cursor-pointer touch-manipulation rounded-full text-[var(--bg)] hover:bg-[color-mix(in_oklab,var(--bg)_12%,transparent)] hover:text-[var(--bg)] active:scale-[0.93]"
           disabled={currentSlide >= totalSlides}
           onClick={goNext}

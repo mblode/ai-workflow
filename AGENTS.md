@@ -22,18 +22,18 @@ There are no tests. CI (`.github/workflows/ci.yml`) runs lint, format check, typ
 ## Layout
 
 - `lib/slides.ts`: the slide list (slug, title, palette). The deck outline, metadata, sitemap and OG images all read from it.
-- `app/[slide]/page.tsx`: maps the slide number to a component; `slideComponents` must stay in the same order as `SLIDES`.
+- `app/[slide]/page.tsx`: maps each slide's slug to its component; a slug with no component fails the type check.
 - `components/slides/ai-workflow-slides.tsx`: every slide component. Shared pieces are in `components/slides/` (`flow-chain.tsx` is the click-by-click flow on the flow slide).
-- Animation is the `motion` package, through `components/slides/primitives/` (`Enter` for entrances, `StepMotion` for what a click changes); the feels, beats and poses are in `lib/motion.ts`. `<Reveal step="name">` lets things outside the reveal change when it fires. Only the headline's weight settle is CSS (`app/globals.css`).
+- Animation is the `motion` package, through `components/slides/primitives/` (`Enter` for entrances; `useRevealSteps` for what a click changes, as in `flow-chain.tsx`); the feel, beats and poses are in `lib/motion.ts`. `<Reveal step="name">` lets things outside the reveal change when it fires. Only the headline's weight settle is CSS (`app/globals.css`).
 - Art: type on one dark ground (palette `e`), with orange (`ACCENT`, in `components/slides/accent.ts`) as the only accent. The only image is the headshot in `public/images/`, imported statically so `basePath` is applied.
 - `packages/deck-presenter`: npm workspace consumed as source (`transpilePackages` plus a Tailwind `@source` in `app/globals.css`). It holds the presenter window, the deck sync hook, `Reveal` and the key map (`src/keys.ts`).
 - `docs/ai-workflow-speaker-notes.md`: speaker notes, shown in the presenter window. `docs/ai-workflow-spine.md` lists where every slide came from.
 
-To add a slide: add an entry to `SLIDES`, write the component, and add it to `slideComponents` at the same index.
+To add a slide: add an entry to `SLIDES`, write the component, and add it to `slideComponents` under its slug.
 
 ## Presenting
 
-Slides render as a fixed 16:9 stage, letterboxed, on every screen including phones (no reflowed phone layout; portrait phones get a "turn sideways" hint, touch screens keep room for the nav pill), and every `--slide-*` token is a share of the stage width (`app/globals.css`, "16:9 stage"). Don't use `md:` breakpoints inside slides. Size new slide content with the `--slide-*` tokens or `--stage-w`, not bare viewport units. `P` opens the speaker notes window (`/presenter`), which drives the deck over a `BroadcastChannel`, so both windows must be in the same browser. `/presenter` and `/notes` are served in production too (`NOTES_ENABLED` in `lib/speaker-notes.ts`), noindex, and anything under a `Flags:` line never ships. `/notes` is the phone view. It cannot follow the deck (different device), so you change slide there with the buttons, a swipe or `#7` in the URL. Both windows share one key map, `createKeyReader` in `packages/deck-presenter/src/keys.ts`.
+Slides render as a fixed 16:9 stage, letterboxed, on every screen including phones (no reflowed phone layout; portrait phones get a "turn sideways" hint, touch screens keep room for the nav pill), and every `--slide-*` token is a share of the stage width (`app/globals.css`, "16:9 stage"). Don't use `md:` breakpoints inside slides. Size new slide content with the `--slide-*` tokens or `--stage-w`, not bare viewport units. `P` opens the speaker notes window (`/presenter`), which drives the deck over a `BroadcastChannel`, so both windows must be in the same browser. `/presenter` and `/notes` are served in production too, noindex, and anything under a `Flags:` line never ships. `/notes` is the phone view. It cannot follow the deck (different device), so you change slide there with the buttons, a swipe or `#7` in the URL. Both windows share one key map, `createKeyReader` in `packages/deck-presenter/src/keys.ts`.
 
 ## Conventions
 
@@ -44,7 +44,7 @@ Slides render as a fixed 16:9 stage, letterboxed, on every screen including phon
 
 ## Verification
 
-A change is proven by `npm run lint && npm run format:check && npm run check-types && npm run build`, then `node scripts/verify-slides.mjs`, which serves the build, fires every reveal and fails on overflow or a sticker over text (screenshots in `out/slide-review/`). Then open the changed slide in `npm run dev` (and `/presenter` for presenter changes). There are no tests, so motion still needs a look in the browser at 16:9.
+A change is proven by `npm run lint && npm run format:check && npm run check-types && npm run build`, then `node scripts/verify-slides.mjs`, which serves the build, fires every reveal and fails on any text overflowing the slide (screenshots in `out/slide-review/`). Then open the changed slide in `npm run dev` (and `/presenter` for presenter changes). There are no tests, so motion still needs a look in the browser at 16:9.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

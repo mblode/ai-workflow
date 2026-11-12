@@ -5,20 +5,11 @@ import type { Transition } from "motion/react";
 // can import it and pass poses across to the client.
 
 /** One beat of choreography, in seconds. Every delay in the deck counts in beats. */
-export const BEAT = 0.16;
+const BEAT = 0.16;
 
-/**
- * Springs for things that move: deliberate for cards and panels, snappy for
- * numbers and stamps, bouncy for sticker scale only. Eases for text and wipes,
- * which never bounce. Everything lands in about a second.
- */
+/** How things move: one ease for every entrance. Text never bounces. */
 export const FEELS = {
-  bouncy: { bounce: 0.5, type: "spring", visualDuration: 0.42 },
-  deliberate: { bounce: 0.15, type: "spring", visualDuration: 0.5 },
   enter: { duration: 0.46, ease: [0.22, 1, 0.36, 1] },
-  expo: { duration: 0.64, ease: [0.19, 1, 0.22, 1] },
-  snappy: { bounce: 0.3, type: "spring", visualDuration: 0.36 },
-  swing: { duration: 0.46, ease: [0.45, 0, 0.55, 1] },
 } as const satisfies Record<string, Transition>;
 
 export type Feel = keyof typeof FEELS;

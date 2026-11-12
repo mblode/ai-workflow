@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       changeFrequency: "monthly",
       // The date the deck last changed, not the build time.
-      lastModified: new Date("2026-11-05"),
+      lastModified: new Date("2026-11-13"),
       priority: 1,
       url: SITE_URL,
     },

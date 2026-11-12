@@ -89,7 +89,7 @@ const jsonLd = {
       breadcrumb: { "@id": `${BASE_URL}/#breadcrumb` },
       inLanguage: "en-US",
       isPartOf: { "@id": "https://blode.co/#website" },
-      description: `${DECK_TITLE} is a talk by Matthew Blode at Claude for Marketing, Melbourne, 5 November 2026.`,
+      description: `${DECK_TITLE} is a talk by Matthew Blode at Sharing AI tools and workflow, Linktree, 13 November 2026.`,
       name: DECK_TITLE,
       publisher: { "@id": "https://blode.co/#organization" },
       url: BASE_URL,
@@ -99,7 +99,7 @@ const jsonLd = {
       "@type": "PresentationDigitalDocument",
       isPartOf: { "@id": "https://blode.co/#website" },
       publisher: { "@id": "https://blode.co/#organization" },
-      about: ["Australia", "Small teams"],
+      about: ["AI agents", "Developer workflow"],
       author: {
         "@id": "https://blode.co/#person",
       },

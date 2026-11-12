@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { MouseEvent } from "react";
 import { DECK_CHANNEL } from "./channel";
 import type { DeckBlank, DeckMessage } from "./channel";
 import { createKeyReader } from "./keys";
@@ -17,6 +18,10 @@ const TICK_MS = 1000;
 const MS_PER_SECOND = 1000;
 const SECONDS_PER_MINUTE = 60;
 const SOFT = "text-white/60";
+// A mouse press must not leave a button focused: the button would then take
+// Space and Enter from the deck's key map.
+const keepFocus = (event: MouseEvent<HTMLButtonElement>) => event.preventDefault();
+
 const BUTTON_CLASS =
   "inline-flex h-10 min-w-10 cursor-pointer items-center justify-center rounded-full px-4 font-medium text-sm hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white disabled:pointer-events-none disabled:opacity-40";
 
@@ -139,10 +144,20 @@ export function PresenterView({ notes, slides }: { notes: string[][]; slides: Pr
       <section aria-label="Slides" className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center gap-1">
           <p className="mr-2 min-w-[5ch] text-4xl tabular-nums">{formatElapsed(elapsed)}</p>
-          <button className={BUTTON_CLASS} onClick={toggleTimer} type="button">
+          <button
+            onMouseDown={keepFocus}
+            className={BUTTON_CLASS}
+            onClick={toggleTimer}
+            type="button"
+          >
             {running ? "Pause" : "Start"}
           </button>
-          <button className={BUTTON_CLASS} onClick={() => setTimer({ banked: 0 })} type="button">
+          <button
+            onMouseDown={keepFocus}
+            className={BUTTON_CLASS}
+            onClick={() => setTimer({ banked: 0 })}
+            type="button"
+          >
             Reset
           </button>
           <p aria-live="polite" className={`mr-2 ml-auto tabular-nums ${SOFT}`}>
@@ -151,6 +166,7 @@ export function PresenterView({ notes, slides }: { notes: string[][]; slides: Pr
             {blank && ` · Screen ${blank}, any key brings it back`}
           </p>
           <button
+            onMouseDown={keepFocus}
             aria-label="Previous slide"
             className={BUTTON_CLASS}
             disabled={slide <= 1}
@@ -160,6 +176,7 @@ export function PresenterView({ notes, slides }: { notes: string[][]; slides: Pr
             <span aria-hidden="true">←</span>
           </button>
           <button
+            onMouseDown={keepFocus}
             aria-label="Next slide"
             className={BUTTON_CLASS}
             disabled={slide >= total && pending === 0}

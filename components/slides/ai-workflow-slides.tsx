@@ -164,7 +164,7 @@ function QrBlock({ data, label, size = 0.07 }: { data: string; label: string; si
           foregroundColor="#211f1e"
         />
       </div>
-      <p className="font-mono slide-text-2xl">{label}</p>
+      <p className="whitespace-nowrap font-mono slide-text-2xl">{label}</p>
     </div>
   );
 }
@@ -234,9 +234,13 @@ export function SlideSinceMay() {
           </Line>
         </div>
         <div className="grid grid-cols-3 gap-[var(--slide-space-8)]">
-          <Stat delay={0.8} label="conversations with Claude Code in 30 days" value="1,694" />
+          <Stat delay={0.8} label="chats with Claude Code in 30 days" value="1,694" />
           <Stat delay={1} label="messages I typed to agents" value="17.5k" />
-          <Stat delay={1.2} label="of those were Claude Code. Codex mostly reviews." value="92%" />
+          <Stat
+            delay={1.2}
+            label="of my chats were Claude Code. Codex mostly reviews."
+            value="92%"
+          />
         </div>
       </Frame>
     </SlideContainer>
@@ -312,19 +316,19 @@ const SNIPPETS = [
   {
     key: "zcc",
     job: "Plan",
-    use: "about 50 sessions",
+    use: "about 50 chats",
     text: "Do extensive research then make an executable plan with checkable tasks, acceptance criteria, dependencies and verification commands.",
   },
   {
     key: "zep",
     job: "Build",
-    use: "about 130 sessions",
+    use: "about 130 chats",
     text: "Execute the agreed plan with parallel subagents on independent tasks. Keep a visible checklist and tick tasks off only with evidence.",
   },
   {
     key: "zgp",
     job: "Ship",
-    use: "about 70 sessions",
+    use: "about 70 chats",
     text: "/tidy and Git commit all changes and push all changes and /pr‑creator and /pr‑babysitter",
   },
 ] as const;
@@ -395,9 +399,6 @@ export function SlideFlow() {
           <Display size="xl">A new feature, start to finish</Display>
         </div>
         <FlowChain steps={FLOW} />
-        <p className="text-[var(--fg-soft)] slide-text-2xl">
-          Model: Opus 5.5 on medium effort. Fable 5.2 for the hardest problems.
-        </p>
       </Frame>
     </SlideContainer>
   );
@@ -580,7 +581,7 @@ export function SlideBabysit() {
     <SlideContainer palette="e">
       <Frame className="justify-center gap-[var(--slide-space-10)]">
         <div className="flex flex-col gap-[var(--slide-space-4)]">
-          <Display size="2xl">Done means merged</Display>
+          <Display size="2xl">Open isn’t done</Display>
           <Line className="max-w-none slide-text-3xl" delay={0.4}>
             A pull request isn’t finished until it merges. /pr-babysitter watches it and:
           </Line>
@@ -589,7 +590,7 @@ export function SlideBabysit() {
           delay={0.8}
           items={[
             "Fixes failing automated checks (CI)",
-            "Updates it when main has moved on",
+            "Updates it when the main branch has moved on",
             "Replies to every review comment",
             "Re-runs flaky checks instead of changing code",
           ]}
@@ -605,7 +606,7 @@ export function SlideGates() {
     <SlideContainer palette="e">
       <Frame className="justify-center gap-[var(--slide-space-10)]">
         <div className="flex flex-col gap-[var(--slide-space-4)]">
-          <Display size="2xl">The gates catch wrong code</Display>
+          <Display size="2xl">The checks catch broken code</Display>
           <Line className="max-w-none slide-text-3xl" delay={0.3}>
             Automatic checks that run before any code can land.
           </Line>
@@ -713,7 +714,7 @@ export function SlideLadder() {
           ))}
         </ol>
         <Line className="max-w-none slide-text-2xl" delay={1.8}>
-          “You aren’t gonna need it”, written down so the agent follows it too.
+          Never cut input checks, error handling, security or accessibility.
         </Line>
       </Frame>
     </SlideContainer>
@@ -848,8 +849,8 @@ export function SlideClose() {
             ]}
           />
           <Enter as="div" className="flex gap-[var(--slide-space-8)]" delay={1.2} from={LIFT}>
-            <QrBlock data={SKILLS_URL} label="agent skills" />
-            <QrBlock data={USES_URL} label="blode.co/uses" />
+            <QrBlock data={SKILLS_URL} label="github.com/mblode/agent-skills" size={0.11} />
+            <QrBlock data={USES_URL} label="blode.co/uses" size={0.11} />
           </Enter>
         </div>
         <Enter as="div" delay={1.4} from={LIFT}>
