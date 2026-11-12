@@ -1,0 +1,36 @@
+export type Palette = "a" | "b" | "c" | "d" | "e";
+
+// Sharing AI tools and workflow, Linktree, 13 November 2026: what changed
+// since May, the flow from plan to merged PR, and what keeps it safe.
+// Every slide sits on the one dark ground (e).
+export const SLIDES = [
+  { slug: "intro", title: "How I use AI", palette: "e" },
+  { slug: "since-may", title: "Since May", palette: "e" },
+  { slug: "setup", title: "My setup", palette: "e" },
+  { slug: "yolo", title: "Skip the prompts. Guard the edges.", palette: "e" },
+  { slug: "snippets", title: "Three keystrokes", palette: "e" },
+  { slug: "flow", title: "The flow", palette: "e" },
+  { slug: "plan", title: "Think really hard once", palette: "e" },
+  { slug: "models", title: "Pick the model, then the effort", palette: "e" },
+  { slug: "parallel", title: "One chat runs the fleet", palette: "e" },
+  { slug: "review", title: "Agents review agents", palette: "e" },
+  { slug: "babysit", title: "Done means merged", palette: "e" },
+  { slug: "gates", title: "The gates catch wrong code", palette: "e" },
+  { slug: "repo", title: "Write the repo for the agent", palette: "e" },
+  { slug: "ladder", title: "Lazy, not negligent", palette: "e" },
+  { slug: "matt-mode", title: "Write your working style down", palette: "e" },
+  { slug: "skills", title: "My agent skills", palette: "e" },
+  { slug: "history", title: "Your chat history is a database", palette: "e" },
+  { slug: "close", title: "Try one thing tomorrow", palette: "e" },
+] as const satisfies readonly {
+  slug: string;
+  title: string;
+  palette: Palette;
+}[];
+
+export const TOTAL_SLIDES = SLIDES.length;
+
+export const DECK_TITLE = "How I use AI";
+
+export const DECK_SUMMARY =
+  "Matthew Blode's AI workflow: three prompt snippets, plan to merged PR, parallel agents, and the gates that keep it safe.";

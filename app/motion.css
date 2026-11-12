@@ -1,0 +1,81 @@
+/* ------------------------------------------------------------------ */
+/* Motion: what's left in CSS                                          */
+/* ------------------------------------------------------------------ */
+/*
+  The deck animates with the motion package (components/slides/primitives
+  and lib/motion.ts). CSS keeps two things: the headline's Glide weight
+  settle, which Display pins line by line, and the static pieces the
+  primitives dress.
+*/
+
+:root {
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* A headline in a step that hasn't been revealed holds on frame zero. */
+[data-reveal-state="pending"] .honk-display {
+  animation-play-state: paused;
+}
+
+/* A slide you've already seen, or a presenter preview, arrives built. */
+[data-entered="instant"] .honk-display {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+}
+
+/* ------------------------------------------------------------------ */
+/* Pieces the primitives dress                                         */
+/* ------------------------------------------------------------------ */
+
+[data-palette] {
+  --hairline-strong: color-mix(in oklab, var(--fg) 36%, transparent);
+  --accent: #e54f11;
+}
+
+[data-palette="a"],
+[data-palette="c"] {
+  --accent: #ffffc2;
+}
+
+/* Thiings-style objects float just off the slide: a soft contact shadow and
+   a wide, faint lift, with no rim. */
+.sticker-shadow {
+  filter: drop-shadow(
+      0 calc(var(--stage-w, 100vw) * 0.003) calc(var(--stage-w, 100vw) * 0.003) rgb(0 0 0 / 0.16)
+    )
+    drop-shadow(
+      0 calc(var(--stage-w, 100vw) * 0.01) calc(var(--stage-w, 100vw) * 0.016) rgb(0 0 0 / 0.18)
+    );
+}
+
+/* A word in a pill with a sticker tucked at its left edge (graphicalui.com). */
+.sticker-token {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  margin-inline: 0.04em;
+  padding: 0 0.18em 0 1.12em;
+  border-radius: 0.3em;
+  background: color-mix(in oklab, var(--fg) 12%, transparent);
+}
+
+.sticker-token-art {
+  position: absolute;
+  left: 0.06em;
+  top: 50%;
+  display: block;
+  width: 0.98em;
+  height: 0.98em;
+  translate: 0 -50%;
+}
+
+/* A sunburst plate: straight rays in two close tones, fading at the rim. */
+.sunburst {
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    var(--sun-a) 0deg 7.5deg,
+    var(--sun-b) 7.5deg 15deg
+  );
+  mask-image: radial-gradient(closest-side, #000 62%, transparent 100%);
+}

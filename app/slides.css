@@ -1,0 +1,92 @@
+/* ------------------------------------------------------------------ */
+/* Slide pieces: the static looks the motion primitives move           */
+/* ------------------------------------------------------------------ */
+
+/* Text on a loud slide that isn't a Display headline: the reveal lines. */
+.reveal-line {
+  font-family: var(--font-glide);
+  font-weight: 680;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* 3: the fourth card, face down until its click flips it. */
+.flip-card {
+  perspective: calc(var(--stage-w, 100vw) * 0.9);
+}
+
+.flip-inner {
+  position: relative;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+
+.flip-back {
+  rotate: y 180deg;
+  background:
+    repeating-conic-gradient(#f0702f 0 25%, #e54f11 0 50%) 0 0 / 25% 18.75%,
+    #e54f11;
+}
+
+/* 5: the line struck through "A month". */
+.strike {
+  position: absolute;
+  inset-inline: 0 -3%;
+  top: 50%;
+  height: 0.07em;
+  border-radius: 999px;
+  background: var(--accent);
+  transform-origin: left center;
+}
+
+/* 10: the bumper sticker. */
+.bumper {
+  display: inline-block;
+  rotate: -3deg;
+  padding: 0.32em 0.7em 0.38em;
+  border-radius: 0.36em;
+  background: #e54f11;
+  color: #ffffc2;
+  font-family: var(--font-glide);
+  font-weight: 720;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  box-shadow:
+    0 0 0 0.12em #fff,
+    0 calc(var(--stage-w, 100vw) * 0.004) 0 0.12em rgb(0 0 0 / 0.08),
+    0 calc(var(--stage-w, 100vw) * 0.012) calc(var(--stage-w, 100vw) * 0.02) 0.1em rgb(0 0 0 / 0.22);
+}
+
+/* 11: the highlight that walks down the rows. */
+.squad-highlight {
+  position: absolute;
+  inset-inline: calc(var(--stage-w, 100vw) * -0.012);
+  top: 0;
+  height: calc(100% / 3);
+  border-radius: calc(var(--stage-w, 100vw) * 0.01);
+  background: color-mix(in oklab, var(--fg) 9%, transparent);
+}
+
+/* 14: words on knockout bars. */
+.knock {
+  display: inline-block;
+  padding: 0.04em 0.22em 0.1em;
+  background: #f6ebd9;
+  color: #211f1e;
+  font-family: var(--font-glide);
+  font-weight: 720;
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.knock-accent {
+  background: #e54f11;
+  color: #ffffc2;
+}

@@ -1,0 +1,4 @@
+{
+  "exclude": ["docs/source/**", ".claude/audit/**", "out/**", "packages/deck-presenter/**"],
+  "rules": ["$GHOSTWRITER_HOME/taste-lint"]
+}

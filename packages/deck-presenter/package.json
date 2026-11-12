@@ -1,0 +1,15 @@
+{
+  "name": "deck-presenter",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A speaker notes window for React slide decks: timer, current and next slide, notes, clicker control.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "react": "^19"
+  }
+}

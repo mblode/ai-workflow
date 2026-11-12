@@ -1,0 +1,684 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./motion.css";
+@import "./slides.css";
+
+/* Tailwind skips node_modules, so name the presenter package's classes. */
+@source "../packages/deck-presenter/src";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-glide);
+  --font-mono: var(--font-glide-mono);
+  --font-heading: var(--font-glide);
+  --font-glide: var(--font-glide);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+/*
+ * The deck's own canvas (`--background` / `--foreground`) is palettes d and e,
+ * not a neutral. Everything else is the shared zero-chroma chrome ramp, cut for
+ * a dark canvas so `--muted-foreground` and `--border` read on this background
+ * instead of carrying light-theme defaults onto it.
+ */
+:root {
+  --radius: 0.625rem;
+  --background: #211f1e;
+  --foreground: #f6ebd9;
+  --card: oklch(0.22 0 0);
+  --card-foreground: oklch(0.96 0 0);
+  --popover: oklch(0.22 0 0);
+  --popover-foreground: oklch(0.96 0 0);
+  --primary: oklch(0.58 0.21 268);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.26 0 0);
+  --secondary-foreground: oklch(0.96 0 0);
+  --muted: oklch(0.26 0 0);
+  --muted-foreground: oklch(0.72 0 0);
+  --accent: oklch(0.26 0 0);
+  --accent-foreground: oklch(0.96 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 0.16);
+  --input: oklch(1 0 0 / 0.16);
+  --ring: oklch(0.58 0.21 268);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  /* Red and green as text on the dark and black slides, lighter than the
+     slide backgrounds so they hold contrast on #211f1e and black. */
+  --tone-bad: #ff4d4d;
+  --tone-good: #22c55e;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "kern", "liga", "calt", "ss01";
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  blockquote {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Honkish palette tokens, the same five pairs as care-made-easy.      */
+/* ------------------------------------------------------------------ */
+[data-palette="a"] {
+  --bg: #e54f11;
+  --fg: #ffffc2;
+  --fg-soft: color-mix(in oklab, #ffffc2 90%, #e54f11);
+  --hairline: color-mix(in oklab, #ffffc2 35%, transparent);
+}
+
+[data-palette="b"] {
+  --bg: #f6ebd9;
+  --fg: #514733;
+  --fg-soft: color-mix(in oklab, #514733 88%, #f6ebd9);
+  --hairline: color-mix(in oklab, #514733 25%, transparent);
+}
+
+[data-palette="c"] {
+  --bg: #0873aa;
+  --fg: #d5ffff;
+  --fg-soft: #aeffff;
+  --hairline: color-mix(in oklab, #aeffff 30%, transparent);
+}
+
+[data-palette="d"] {
+  --bg: #211f1e;
+  --fg: #f6ebd9;
+  --fg-soft: color-mix(in oklab, #f6ebd9 60%, #211f1e);
+  --hairline: color-mix(in oklab, #f6ebd9 18%, transparent);
+}
+
+[data-palette="e"] {
+  --bg: #211f1e;
+  --fg: #f6ebd9;
+  --fg-soft: color-mix(in oklab, #f6ebd9 72%, #211f1e);
+  --hairline: color-mix(in oklab, #f6ebd9 18%, transparent);
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion keyframes                                                    */
+/* ------------------------------------------------------------------ */
+/* Glide gets wider as it gets bolder: 360 sets about 0.023em per character
+   narrower than 720, and the gap is linear in weight. Tracking opens by the
+   same amount at 360 and closes as the weight rises, so every frame sets at
+   the final width and a headline never re-wraps mid-animation. The end value
+   matches .honk-display's letter-spacing. */
+@keyframes display-settle {
+  0% {
+    font-weight: 360;
+    letter-spacing: -0.0017em;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  60% {
+    font-weight: 720;
+    letter-spacing: -0.025em;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    font-weight: 720;
+    letter-spacing: -0.025em;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes kinetic-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Fluid typography and spacing                                        */
+/* ------------------------------------------------------------------ */
+:root {
+  --slide-space-1: clamp(4px, 0.25vw, 6px);
+  --slide-space-2: clamp(8px, 0.5vw, 12px);
+  --slide-space-3: clamp(12px, 0.75vw, 18px);
+  --slide-space-4: clamp(16px, 1vw, 24px);
+  --slide-space-5: clamp(20px, 1.25vw, 30px);
+  --slide-space-6: clamp(24px, 1.5vw, 36px);
+  --slide-space-8: clamp(32px, 2vw, 48px);
+  --slide-space-10: clamp(40px, 2.5vw, 60px);
+  --slide-space-12: clamp(48px, 3vw, 72px);
+  --slide-space-16: clamp(64px, 4vw, 96px);
+
+  --slide-text-xs: clamp(12px, 0.75vw, 14px);
+  --slide-text-sm: clamp(12px, 0.8vw, 16px);
+  --slide-text-base: clamp(14px, 0.95vw, 20px);
+  --slide-text-lg: clamp(16px, 1.1vw, 24px);
+  --slide-text-xl: clamp(18px, 1.3vw, 28px);
+  --slide-text-2xl: clamp(22px, 1.6vw, 36px);
+  --slide-text-3xl: clamp(28px, 2vw, 44px);
+  --slide-text-4xl: clamp(34px, 2.5vw, 56px);
+  --slide-text-5xl: clamp(42px, 3.2vw, 72px);
+  --slide-text-6xl: clamp(56px, 5vw, 110px);
+  --slide-text-7xl: clamp(72px, 7.5vw, 160px);
+  --slide-text-display: clamp(64px, 9vw, 200px);
+
+  --slide-radius-sm: clamp(4px, 0.3vw, 8px);
+  --slide-radius-md: clamp(6px, 0.4vw, 10px);
+  --slide-radius-lg: clamp(8px, 0.5vw, 14px);
+  --slide-radius-xl: clamp(12px, 0.75vw, 20px);
+  --slide-radius-2xl: clamp(16px, 1vw, 28px);
+
+  --motion-duration-enter: 420ms;
+  --motion-duration-settle: 540ms;
+  --motion-ease: cubic-bezier(0.6, 0, 0, 1);
+}
+
+.slide {
+  contain: layout style paint;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--slide-space-8);
+  /* Reserve clearance so the fixed slide-nav pill never overlaps content. */
+  padding-bottom: calc(var(--slide-space-8) + 4.5rem);
+}
+
+/* ------------------------------------------------------------------ */
+/* 16:9 stage                                                          */
+/* ------------------------------------------------------------------ */
+/*
+  On every screen the slide is a fixed 16:9 frame, letterboxed on black, and
+  every token is a share of the frame's width. So a projector at 1024x768, a
+  1080p screen, a 4K TV and a phone all show the same slide, only bigger or
+  smaller, as Keynote and Google Slides do. The slides are compositions, so a
+  phone gets the same picture, not a reflowed column. At 1920x1080 the values
+  match the fluid tokens above, which is the size the deck was designed at.
+*/
+@media all {
+  :root {
+    --stage-w: min(100vw, 100dvh * 16 / 9);
+
+    --slide-space-1: calc(var(--stage-w) * 0.0025);
+    --slide-space-2: calc(var(--stage-w) * 0.005);
+    --slide-space-3: calc(var(--stage-w) * 0.0075);
+    --slide-space-4: calc(var(--stage-w) * 0.01);
+    --slide-space-5: calc(var(--stage-w) * 0.0125);
+    --slide-space-6: calc(var(--stage-w) * 0.015);
+    --slide-space-8: calc(var(--stage-w) * 0.02);
+    --slide-space-10: calc(var(--stage-w) * 0.025);
+    --slide-space-12: calc(var(--stage-w) * 0.03);
+    --slide-space-16: calc(var(--stage-w) * 0.04);
+
+    --slide-text-xs: calc(var(--stage-w) * 0.0075);
+    --slide-text-sm: calc(var(--stage-w) * 0.008);
+    --slide-text-base: calc(var(--stage-w) * 0.0095);
+    --slide-text-lg: calc(var(--stage-w) * 0.011);
+    --slide-text-xl: calc(var(--stage-w) * 0.013);
+    --slide-text-2xl: calc(var(--stage-w) * 0.016);
+    --slide-text-3xl: calc(var(--stage-w) * 0.02);
+    --slide-text-4xl: calc(var(--stage-w) * 0.025);
+    --slide-text-5xl: calc(var(--stage-w) * 0.032);
+    --slide-text-6xl: calc(var(--stage-w) * 0.05);
+    --slide-text-7xl: calc(var(--stage-w) * 0.075);
+    --slide-text-display: calc(var(--stage-w) * 0.09);
+
+    --slide-radius-sm: calc(var(--stage-w) * 0.003);
+    --slide-radius-md: calc(var(--stage-w) * 0.004);
+    --slide-radius-lg: calc(var(--stage-w) * 0.005);
+    --slide-radius-xl: calc(var(--stage-w) * 0.0075);
+    --slide-radius-2xl: calc(var(--stage-w) * 0.01);
+  }
+
+  [data-deck-stage] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+  }
+
+  /* The pill floats over the frame and hides when the mouse is still, so the
+     frame keeps even padding instead of reserving room for it. */
+  [data-deck-stage] > .slide {
+    width: var(--stage-w);
+    height: calc(var(--stage-w) * 9 / 16);
+    min-height: 0;
+    padding: var(--slide-space-8);
+  }
+}
+
+/* Touch screens keep the pill (it is their only way back), so the frame sits
+   above it instead of under it. */
+@media (pointer: coarse) {
+  :root:not([data-presenting]) {
+    --stage-w: min(100vw, (100dvh - 4.5rem) * 16 / 9);
+  }
+
+  html:not([data-presenting]) [data-deck-stage] {
+    padding-bottom: 4.5rem;
+  }
+}
+
+/* A phone held upright shows the slide small; the letterbox says how to fix it. */
+.rotate-hint {
+  display: none;
+}
+
+@media (orientation: portrait) and (max-width: 767px) {
+  .rotate-hint {
+    display: block;
+  }
+}
+
+html[data-presenting] .rotate-hint {
+  display: none;
+}
+
+/* Fullscreen is presenting: the slide, and nothing else. */
+html[data-presenting] {
+  overflow: hidden;
+  background: #000;
+}
+
+html[data-presenting] [data-slide-nav],
+html[data-presenting] [data-deck-extras] {
+  display: none;
+}
+
+html[data-idle],
+html[data-idle] * {
+  cursor: none !important;
+}
+
+@media (pointer: fine) {
+  html[data-idle] [data-slide-nav] {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* In the components layer, so a Tailwind `leading-*` on the same element wins. */
+@layer components {
+  .slide-text-xs {
+    font-size: var(--slide-text-xs);
+    line-height: 1.5;
+  }
+
+  .slide-text-sm {
+    font-size: var(--slide-text-sm);
+    line-height: 1.5;
+  }
+
+  .slide-text-base {
+    font-size: var(--slide-text-base);
+    line-height: 1.5;
+  }
+
+  .slide-text-lg {
+    font-size: var(--slide-text-lg);
+    line-height: 1.5;
+  }
+
+  .slide-text-xl {
+    font-size: var(--slide-text-xl);
+    line-height: 1.5;
+  }
+
+  .slide-text-2xl {
+    font-size: var(--slide-text-2xl);
+    line-height: 1.1;
+  }
+
+  .slide-text-3xl {
+    font-size: var(--slide-text-3xl);
+    line-height: 1.1;
+  }
+
+  .slide-text-4xl {
+    font-size: var(--slide-text-4xl);
+    line-height: 1.1;
+  }
+
+  .slide-text-5xl {
+    font-size: var(--slide-text-5xl);
+    line-height: 1.1;
+  }
+
+  .slide-text-6xl {
+    font-size: var(--slide-text-6xl);
+    line-height: 1.1;
+  }
+
+  .slide-text-7xl {
+    font-size: var(--slide-text-7xl);
+    line-height: 1.1;
+  }
+
+  .slide-text-display {
+    font-size: var(--slide-text-display);
+    line-height: 1.1;
+  }
+}
+
+.slide-gap-1 {
+  gap: var(--slide-space-1);
+}
+
+.slide-gap-2 {
+  gap: var(--slide-space-2);
+}
+
+.slide-gap-3 {
+  gap: var(--slide-space-3);
+}
+
+.slide-gap-4 {
+  gap: var(--slide-space-4);
+}
+
+.slide-gap-5 {
+  gap: var(--slide-space-5);
+}
+
+.slide-gap-6 {
+  gap: var(--slide-space-6);
+}
+
+.slide-gap-8 {
+  gap: var(--slide-space-8);
+}
+
+.slide-gap-10 {
+  gap: var(--slide-space-10);
+}
+
+.slide-gap-12 {
+  gap: var(--slide-space-12);
+}
+
+.slide-p-4 {
+  padding: var(--slide-space-4);
+}
+
+.slide-p-6 {
+  padding: var(--slide-space-6);
+}
+
+.slide-p-8 {
+  padding: var(--slide-space-8);
+}
+
+.slide-p-10 {
+  padding: var(--slide-space-10);
+}
+
+.slide-p-12 {
+  padding: var(--slide-space-12);
+}
+
+.slide-py-4 {
+  padding-top: var(--slide-space-4);
+  padding-bottom: var(--slide-space-4);
+}
+
+.slide-py-6 {
+  padding-top: var(--slide-space-6);
+  padding-bottom: var(--slide-space-6);
+}
+
+.slide-py-8 {
+  padding-top: var(--slide-space-8);
+  padding-bottom: var(--slide-space-8);
+}
+
+.slide-px-4 {
+  padding-left: var(--slide-space-4);
+  padding-right: var(--slide-space-4);
+}
+
+.slide-px-6 {
+  padding-left: var(--slide-space-6);
+  padding-right: var(--slide-space-6);
+}
+
+.slide-px-8 {
+  padding-left: var(--slide-space-8);
+  padding-right: var(--slide-space-8);
+}
+
+.slide-mb-4 {
+  margin-bottom: var(--slide-space-4);
+}
+
+.slide-mb-6 {
+  margin-bottom: var(--slide-space-6);
+}
+
+.slide-mb-8 {
+  margin-bottom: var(--slide-space-8);
+}
+
+.slide-mt-4 {
+  margin-top: var(--slide-space-4);
+}
+
+.slide-mt-6 {
+  margin-top: var(--slide-space-6);
+}
+
+.slide-mt-8 {
+  margin-top: var(--slide-space-8);
+}
+
+.slide-mt-10 {
+  margin-top: var(--slide-space-10);
+}
+
+.slide-rounded-sm {
+  border-radius: var(--slide-radius-sm);
+}
+
+.slide-rounded-md {
+  border-radius: var(--slide-radius-md);
+}
+
+.slide-rounded-lg {
+  border-radius: var(--slide-radius-lg);
+}
+
+.slide-rounded-xl {
+  border-radius: var(--slide-radius-xl);
+}
+
+.slide-rounded-2xl {
+  border-radius: var(--slide-radius-2xl);
+}
+
+/* ------------------------------------------------------------------ */
+/* Honkish primitives                                                  */
+/* ------------------------------------------------------------------ */
+.honk-display {
+  font-family: var(--font-glide);
+  font-feature-settings: "kern", "ss01", "ss02";
+  font-weight: 720;
+  letter-spacing: -0.025em;
+  line-height: 0.95;
+  padding-bottom: 0.15em;
+  text-wrap: balance;
+  hanging-punctuation: first last;
+  will-change: transform, opacity;
+  animation: display-settle var(--motion-duration-settle) var(--ease-enter) both;
+}
+
+/* Held on its first (invisible) frame until Display has pinned its line
+   breaks, then played. See lockLines in primitives/display.tsx. */
+.honk-display:not([data-settled]) {
+  animation-play-state: paused;
+}
+
+.honk-mark {
+  display: inline-flex;
+  align-items: center;
+  align-self: start;
+  width: fit-content;
+  gap: var(--slide-space-2);
+  padding: var(--slide-space-2) var(--slide-space-5);
+  border: 1.5px solid var(--fg);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  font-size: var(--slide-text-2xl);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+  background: transparent;
+}
+
+.honk-mark[data-variant="solid"] {
+  background: var(--fg);
+  color: var(--bg);
+  border-color: var(--bg);
+}
+
+.honk-block {
+  border: 1.5px solid var(--fg);
+  border-radius: var(--slide-radius-xl);
+  padding: var(--slide-space-6);
+  position: relative;
+  background: transparent;
+  transition:
+    background 220ms var(--motion-ease),
+    color 220ms var(--motion-ease);
+}
+
+.honk-block[data-tone="plain"] {
+  border-color: transparent;
+}
+
+.honk-block[data-tone="solid"] {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.honk-hairline {
+  height: 1px;
+  background: var(--hairline);
+  width: 100%;
+}
+
+.honk-hairline-v {
+  width: 1px;
+  background: var(--hairline);
+  align-self: stretch;
+}
+
+.honk-numeral {
+  font-family: var(--font-glide);
+  font-weight: 700;
+  font-size: var(--slide-text-7xl);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--fg-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.honk-stagger > * {
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: kinetic-rise var(--motion-duration-enter) var(--motion-ease) forwards;
+  animation-delay: calc(var(--stagger-i, 0) * 50ms + 80ms);
+}
+
+.honk-fade-up {
+  will-change: transform, opacity;
+  animation: kinetic-rise var(--motion-duration-enter) var(--motion-ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .honk-display,
+  .honk-stagger > *,
+  .honk-fade-up {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Phones: no stagger on the outline page                               */
+/* ------------------------------------------------------------------ */
+@media (max-width: 767px) {
+  .honk-fade-up,
+  .honk-stagger > * {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
+
+[data-palette] a:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 4px;
+  border-radius: 2px;
+}

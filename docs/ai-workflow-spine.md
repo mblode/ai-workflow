@@ -1,0 +1,32 @@
+# How I use AI: spine and sources
+
+**Event.** "Sharing AI tools and workflow", a 20-minute talk with no Q&A, on Microsoft Teams, Thursday 13 November 2026, 3:30pm AEDT. Booked by Tommy Ling. Served at <https://blode.co/ai-workflow>.
+
+**Room.** About 16 Linktree engineers. Many of them saw "Unblocking Yourself with AI" on 14 May 2026 (<https://blode.co/ai-usage>, repo `~/Code/mblode/ai-usage-for-engineers`), so this talk shows what changed since May and does not retell it.
+
+**One idea.** Let the agents run without asking, and put your judgement into the plan, the gates and the skills instead. Three keystrokes take a feature from plan to merged PR.
+
+**Shape.** One flow (plan, execute, tidy, PR, review, babysit, merged), shown once on slide 6 with a click per step, then one slide for each part of it. Every story comes from my own projects (Done Bear, agent-skills, blode-co) or my company's monorepo, with no client names. Linktree repos count in the totals but are never named. Numbers are from my chat history over the last 30 days to 13 Nov 2026, and they are approximate.
+
+## Where every slide came from
+
+| Slide | Title | Source |
+|---|---|---|
+| 1 | How I use AI | This talk's title; layout from the you-have-taste intro slide (`origin/main` at `07f2916`) |
+| 2 | Since May | blode.co/ai-usage slides 07, 08, 13 to 15 for the "then"; chat-history over 30 days for the "now": 1,694 Claude Code sessions, about 17.5k prompts, 147 Codex sessions (about 92% to 8%) |
+| 3 | My setup | blode.co/uses (`blode-co/apps/web/app/uses/page.tsx`): Codex, Claude Code, cmux with DiffHub, a MacBook Pro running agents around the clock, an iPhone to merge from bed, Raycast snippets |
+| 4 | Skip the prompts. Guard the edges. | `cc` and `co` aliases in my shell config (`claude --dangerously-skip-permissions`, `codex --dangerously-bypass-approvals-and-sandbox`); `~/.claude/settings.json` (`defaultMode: "auto"`, `effortLevel: "medium"`); my Claude Code hooks (tests only right before `git push`, heavy commands queued, whole-file reads over 400 lines refused); global CLAUDE.md (one worktree per change) |
+| 5 | Three keystrokes | My Raycast snippets `zcc`, `zep` and `zgp` (text from my own message; the snippets could not be exported); session counts from chat-history: zcc about 50, zep about 129, zgp about 70 |
+| 6 | The flow | This talk's flow: new feature, `/planning` with `/codebase-architecture`, update the plan, execute with `zep`, `/tidy`, `/pr-creator`, Codex review in GitHub, `/pr-babysitter`, merged. Skill names from github.com/mblode/agent-skills |
+| 7 | Think hard once | agent-skills `planning` skill (checkable tasks, acceptance criteria, dependencies, verification commands); beyond-the-hype "think-hard-once" slide; this deck's own plan as the example |
+| 8 | Pick the model, then the effort | chat-history: Opus 5.5 answered most in 967 sessions, Fable 5.2 in 11, `/effort` typed 50 times, `/model` 34 times; Fable 5.2 on the Claude Ultra plan is my stated choice for hard problems |
+| 9 | One chat runs the fleet | agent-skills `captain` skill (56 uses in 30 days); cmux; global CLAUDE.md worktree rule; story from my company's monorepo: 11 workspaces and about 42 PRs in one move |
+| 10 | Agents review agents | Codex GitHub review in chat-history: 62 P1 labels across about 20 sessions; story: a P1 caught an ORM version pin that a migration dropped, in my company's monorepo |
+| 11 | Done means merged | agent-skills `pr-babysitter` (188 uses in 30 days): CI, conflicts and review threads until the PR can merge; matt-mode "Done means live" |
+| 12 | The gates catch wrong code | Toolchain in Done Bear, blode-co and scaffold-nextjs: oxfmt, oxlint, ultracite, lefthook pre-commit and pre-push, knip, CI checks; the test-before-push hook |
+| 13 | Write the repo for the agent | Root AGENTS.md in donebear and the agent-skills `scaffold-nextjs` skill; turborepo monorepos; `agents-md` and `readme` skills |
+| 14 | Lazy, not negligent | Global CLAUDE.md, "Minimal code" section (the seven-rung ladder) |
+| 15 | Write your working style down | matt-mode skill, unmerged branch `matt-mode` of agent-skills-private (`12614ff`, `skills/matt-mode/SKILL.md`): "Done means live", "Never block on Matt for reversible work" (from factory-mode), the stock-phrases table. Quoted, not linked |
+| 16 | My agent skills | github.com/mblode/agent-skills; install command `npx skills add mblode/agent-skills -g --agent codex claude-code -y` (27 skills); top skills by use in 30 days: tidy 327, pr-creator 201, pr-babysitter 188, planning 93, ui-design 90, codebase-architecture 75, captain 56; art from the you-have-taste "agent-skills" and "installs" slides |
+| 17 | Your chat history is a database | agent-skills `chat-history` skill; every number in this deck came from it on 13 Nov 2026 |
+| 18 | Try one thing tomorrow | This talk's takeaway; QR codes to github.com/mblode/agent-skills and blode.co/uses |
