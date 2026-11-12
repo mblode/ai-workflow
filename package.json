@@ -15,11 +15,9 @@
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "check-types": "tsc --noEmit",
-    "export-pdf": "node scripts/export-pdf.mjs",
     "check": "ultracite check",
     "fix": "ultracite fix",
-    "prepare": "if [ -z \"$VERCEL\" ]; then lefthook install; fi",
-    "export-pptx": "node scripts/export-pptx.mjs"
+    "prepare": "if [ -z \"$VERCEL\" ]; then lefthook install; fi"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -41,14 +39,12 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "agentation": "^3.0.2",
-    "jszip": "^3.10.2",
     "lefthook": "^2.1.10",
     "oxfmt": "^0.58.0",
     "oxlint": "^1.73.0",
     "playwright-core": "^1.63.0",
     "portless": "^0.15.4",
     "postcss": "^8.5.17",
-    "pptxgenjs": "^4.0.1",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.4.0",
     "typescript": "^7.0.2",
