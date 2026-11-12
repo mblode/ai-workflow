@@ -17,7 +17,7 @@ npm run check         # ultracite check: lint and format together
 npm run fix           # ultracite fix
 ```
 
-There are no tests. CI (`.github/workflows/ci.yml`) runs lint, format check, types and build. The pre-commit hook runs `oxfmt --write` and `oxlint --fix` on staged files. `npm run export-pdf` writes a PDF backup from a running deck, and `npm run export-pptx` a PowerPoint with the same clicks and the speaker notes in Presenter View (both share `scripts/capture-deck.mjs`; see the comment at the top of each script).
+There are no tests. CI (`.github/workflows/ci.yml`) runs lint, format check, types and build. The pre-commit hook runs `oxfmt --write` and `oxlint --fix` on staged files.
 
 ## Layout
 
