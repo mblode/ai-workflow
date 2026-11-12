@@ -20,7 +20,6 @@ import profile from "@/public/images/profile.jpg";
 // 13 November 2026, and are approximate.
 
 const SKILLS_URL = "https://github.com/mblode/agent-skills";
-const USES_URL = "https://blode.co/uses";
 
 const LIFT: Pose = { opacity: 0, y: "0.25em" };
 const RADIUS = "rounded-[calc(var(--stage-w,100vw)*0.008)]";
@@ -848,9 +847,8 @@ export function SlideClose() {
               "Let an agent see one pull request through to merge",
             ]}
           />
-          <Enter as="div" className="flex gap-[var(--slide-space-8)]" delay={1.2} from={LIFT}>
+          <Enter as="div" delay={1.2} from={LIFT}>
             <QrBlock data={SKILLS_URL} label="github.com/mblode/agent-skills" size={0.11} />
-            <QrBlock data={USES_URL} label="blode.co/uses" size={0.11} />
           </Enter>
         </div>
         <Enter as="div" delay={1.4} from={LIFT}>

@@ -30,4 +30,4 @@
 | 16 | Write your working style down | matt-mode skill, unmerged branch `matt-mode` of agent-skills-private (`12614ff`, `skills/matt-mode/SKILL.md`): "Done means live", "Never block on Matt for reversible work" (from factory-mode), the stock-phrases table. Quoted, not linked |
 | 17 | My agent skills | github.com/mblode/agent-skills; install command `npx skills add mblode/agent-skills -g --agent codex claude-code -y` (27 skills); top skills by use in 30 days: tidy 327, pr-creator 201, pr-babysitter 188, planning 93, ui-design 90, codebase-architecture 75, captain 56; art from the you-have-taste "agent-skills" and "installs" slides |
 | 18 | Your chat history is a database | agent-skills `chat-history` skill; every number in this deck came from it on 13 Nov 2026 |
-| 19 | Try one thing tomorrow | This talk's takeaway; QR codes to github.com/mblode/agent-skills and blode.co/uses |
+| 19 | Try one thing tomorrow | This talk's takeaway; QR code to github.com/mblode/agent-skills |

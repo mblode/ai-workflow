@@ -33,7 +33,7 @@ Flags:
 - captain is a tool I built. It's one chat that hands tasks out to lots of agents.
 - Raycast gives me snippets: three letters that expand into a full prompt.
 - And skills. A skill is a saved checklist the agent reads first. One for planning, one for pull requests, and so on.
-- The full list is on blode.co/uses. There's a QR code for it at the end.
+- The full list is on blode.co/uses.
 
 ## 4. Let it work. Guard the edges.
 
@@ -242,6 +242,6 @@ Flags:
 - Save your best prompt as a snippet. Write it once, stop retyping it.
 - Ask for a plan before any code. Read it, fix it, then let it build.
 - Let an agent see one pull request through to merge. Watch what it does with the review comments.
-- If you want a head start, the left QR code is my agent skills. The right one is blode.co/uses, with my whole setup.
+- If you want a head start, the QR code is my agent skills.
 - The short version of the talk: let the agents do the work, and put your judgement into the plan, the checks and the skills.
 - Thanks everyone. Ping me on Slack if you want to go deeper.
