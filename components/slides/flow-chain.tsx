@@ -39,9 +39,7 @@ export function FlowChain({ steps }: { steps: readonly FlowStep[] }) {
             >
               {step.name}
             </p>
-            <p className="font-mono leading-[1.3] text-[var(--fg-soft)] slide-text-xl">
-              {step.detail}
-            </p>
+            <p className="leading-[1.3] text-[var(--fg-soft)] slide-text-2xl">{step.detail}</p>
           </Enter>
         );
 

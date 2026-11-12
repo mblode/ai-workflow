@@ -1,120 +1,121 @@
 # How I use AI: speaker notes
 
-Twenty minutes, 18 slides, no Q&A, on Microsoft Teams for about 16 Linktree engineers, Thursday 13 November 2026. Many of them saw the May talk (blode.co/ai-usage), so frame changes as "since May" and never retell it. One flow (plan, execute, tidy, PR, review, babysit, merged) and one idea: let the agents run, and put your judgement into the plan, the gates and the skills. Numbers are from my chat history over the last 30 days and are approximate, so say "about". Beats are prompts, not a script, and the timings are estimates until a timed run. Anything under a `Flags:` line is for editing and never shows in the presenter window.
+Twenty minutes, 18 slides, no Q&A, on Microsoft Teams for about 16 Linktree engineers, Thursday 13 November 2026. Pitch it at someone who has barely used an AI agent: explain each piece of jargon in plain words the first time it comes up, then use it freely. Some of the room saw the May talk (blode.co/ai-usage), so mention what changed since May without retelling it. One flow (plan, review the plan, build, clean up, pull request, AI review, fix until green, merged and live) and one idea: let the agents do the work, and put your judgement into the plan, the checks and the skills. Numbers are from my chat history over the last 30 days and are approximate, so say "about". Beats are prompts, not a script, and the timings are estimates until a timed run. Anything under a `Flags:` line is for editing and never shows in the presenter window.
 
 ## 1. How I use AI
 
 - 0:00 to 0:20.
 - Hey everyone. Thanks Tommy for setting this up.
-- Twenty minutes, no questions at the end, so I'll go fast. Ping me on Slack after if anything's unclear.
-- This is how I actually use AI day to day. The setup, the three snippets I type all day, the flow from plan to merged PR, and the skills that hold it together.
+- Twenty minutes, no questions at the end, so I'll keep moving. Ping me on Slack after.
+- This is how I go from an idea to shipped code with AI agents. An agent is an AI that does tasks, not just answers. It reads your code, runs commands and makes changes.
+- You don't need any experience with them. If you've only used ChatGPT in a browser, this is for you.
 
 ## 2. Since May
 
 - 0:20 to 1:30.
-- Some of you saw my talk back in May. That's still up at blode.co/ai-usage, so I won't repeat it.
-- A lot has changed since then. In May I said plan in Claude, execute in Codex. Now Claude Code does about 92% of my sessions. Codex is mostly my reviewer on GitHub.
-- In May I had one long default prompt. Now it's three snippets.
-- In May I said Codex runs through the night and I triage PRs over coffee. Now the agents merge and check production, and only decisions come back to me.
-- The numbers for the last 30 days: about 1,700 Claude Code sessions, about 17,500 prompts, and about 150 Codex sessions.
-- That sounds like a lot. Most of those sessions run while I'm doing something else.
+- Some of you saw my talk back in May. It's still up at blode.co/ai-usage, so I won't repeat it.
+- Back then I ran one long prompt in twenty terminal tabs.
+- Now I use three saved prompts. And the agents carry each change all the way to merge. Merge means your change joins the main code.
+- The numbers for the last 30 days. About 1,700 conversations with Claude Code. About 17,500 messages I typed to agents.
+- About 92% of that was Claude Code. Codex, which is OpenAI's agent, mostly reviews my work now.
+- That sounds like a lot of typing. It isn't really. Most of those messages are three letters long, and I'll show you why in a minute.
+- And most of the work happens while I'm doing something else.
 
 Flags:
-- SOURCE: chat-history, 30 days to 13 Nov 2026: 1,694 Claude Code sessions, about 17.5k prompts, 147 Codex sessions. May quotes from ai-usage slides 07, 08 and 14a.
+- SOURCE: chat-history, 30 days to 13 Nov 2026: 1,694 Claude Code sessions, about 17.5k prompts, 147 Codex sessions.
 
 ## 3. My setup
 
 - 1:30 to 2:30.
 - My setup is pretty boring, and that's on purpose.
-- Claude Code and Codex in the terminal. cmux to run lots of them side by side, with DiffHub to read the diffs.
-- Raycast for snippets, which I'll show you in a second.
-- A MacBook Pro that runs agents around the clock. It doesn't sleep.
-- And my iPhone. A surprising amount of my merging happens from bed. The agent has already done the checks, so I'm reading the summary and pressing the button.
-- The whole list is on blode.co/uses if you want to copy any of it.
-- None of this is exotic. The difference is less the tools and more what I've wrapped around them.
+- Claude Code is my main agent. It runs in the terminal.
+- Codex is OpenAI's agent. I mostly use it to review pull requests. A pull request is a proposed change, waiting for review.
+- cmux is a terminal app with a tab per agent. It pings me when one of them needs me.
+- captain is a tool I built. It's one chat that hands tasks out to lots of agents.
+- Raycast gives me snippets. A snippet is a few letters that expand into text. Three letters become a full prompt.
+- And skills. A skill is a saved checklist the agent reads first. One for planning, one for pull requests, and so on.
+- The full list is on blode.co/uses. There's a QR code for it at the end.
 
-## 4. Skip the prompts. Guard the edges.
+## 4. Let it work. Guard the edges.
 
 - 2:30 to 3:40.
-- This is the slide that makes security people nervous, so let me be careful.
-- My `cc` alias is Claude with `--dangerously-skip-permissions`. `co` is the Codex equivalent. I don't approve every command.
-- But that flag never runs on its own. It's paired with guardrails.
-- Hooks. Tests are only allowed right before `git push`. Heavy commands get queued so ten agents don't build at once. Whole-file reads over 400 lines get refused.
-- Worktrees. Every change gets its own worktree on its own branch, so one agent can't trash another's work.
-- Gates. Lint, format and CI catch the wrong code before it lands.
-- So I'm not removing safety. I'm moving it from me clicking yes to things that check every time.
-- Please follow our security policy here. Auto mode with good hooks gets you most of the way.
+- This is the slide I want you to read carefully.
+- My `cc` alias runs Claude with `--dangerously-skip-permissions`. That flag stops Claude asking before every command. I don't click yes a hundred times a day.
+- But I only do that because three guardrails are in place.
+- One. Each change happens in its own copy of the repo. That's called a worktree: a second checkout of the same repo. So two agents can't break each other's work.
+- Two. Automated checks must pass. On GitHub those run in CI, which runs your checks on every change.
+- Three. A reviewer must pass it too, and that's another AI. More on that later.
+- If you're new to agents, keep approvals on. Let it ask you. Turn them off only once these guardrails exist, and always follow our security policy.
 
 Flags:
-- Do not encourage anyone to break company policy. The point is the pairing, not the flag. `~/.claude/settings.json` has `defaultMode: "auto"`.
+- Do not encourage anyone to break company policy. The point is the pairing, not the flag.
 
 ## 5. Three keystrokes
 
 - 3:40 to 5:00.
-- In May I had one long default prompt. Now it's three Raycast snippets, and they do most of my typing.
-- `zcc` is the plan. It asks for a plan with acceptance criteria and the commands that prove each step works. I used it in about 50 sessions last month.
-- `zep` is execute. It tells the agent who owns which files, and not to sit there polling. About 129 sessions.
-- `zgp` is ship. Tidy the diff, commit, open the PR, then babysit it until it merges. About 70 sessions.
-- That's it. Plan, execute, ship.
-- The text is on the slide, so take a screenshot. Steal them, change the words, make them yours.
-- The reason this works is that I stopped rewriting the same instructions every time. I wrote them once, and now it's three keystrokes.
+- This is the cheapest trick in the talk.
+- A snippet turns three letters into a whole prompt. I have three. One to plan, one to build, one to ship.
+- `zcc` is Plan. Do extensive research, then write a plan with checkable tasks, what done looks like, dependencies, and how to check it. About 50 sessions last month.
+- `zep` is Build. Do the agreed plan, split independent tasks across helper agents, and tick tasks off only with proof. About 130 sessions.
+- `zgp` is Ship. Tidy it up, commit, push, open the pull request, then look after it until it merges. About 70.
+- I wrote these once. Now I never retype them.
+- You don't need Raycast for this. Any text expander works. Even a notes file you copy from.
+- Take a screenshot. Steal them, change the words, make them yours.
 
-Flags:
-- The snippets couldn't be exported from Raycast. The slide text came from my own message. Don't claim it's a verbatim export.
-
-## 6. The flow
+## 6. A new feature, start to finish
 
 - 5:00 to 6:40.
-- This is the whole thing on one slide. It starts with a new feature, usually a ticket or a messy note. Step one is the plan: `/planning` with `/codebase-architecture`. The agent reads the code and writes a plan.
-- Click. I update the plan. I answer its questions and cut scope. This is where most of my time goes.
-- Click. Execute with `zep`. Often with parallel subagents.
-- Click. Tidy. `/tidy` reviews its own diff, and oxfmt and oxlint clean it up.
-- Click. Open the PR with `/pr-creator`, in our house style.
-- Click. Codex reviews it on GitHub. One agent checking another.
-- Click. Babysit. `/pr-babysitter` fixes CI, conflicts and review comments.
-- Click. Merged and live, and checked in prod.
-- The line at the bottom is the model. More on that in a couple of slides.
-- I'm in two places: the plan, and the decision at the end. Everything in between runs on its own.
+- This is the whole thing on one slide. It starts with a new feature, usually a ticket or a messy note. Step one is Plan. The agent reads the code and writes a plan.
+- Click. Review the plan. I answer its questions and cut scope. This is where most of my time goes.
+- Click. Build. Several agents write the code at once.
+- Click. Clean up. `/tidy` reviews its own change and cuts what doesn't need to be there.
+- Click. Open a pull request. `/pr-creator` writes it up.
+- Click. AI review. Codex checks it on GitHub.
+- Click. Fix until green. `/pr-babysitter` handles the failing checks and the review comments.
+- Click. Merged and live. Checked in production.
+- The line at the bottom is the model. Effort is how long it thinks before answering. More on that in two slides.
+- I'm in two places: the plan, and the decision at the end.
 
 Flags:
 - Step 1 (Plan) shows on arrival. Then seven clicks, one per step. Don't race it.
 
-## 7. Think hard once
+## 7. Think really hard once
 
 - 6:40 to 7:50.
-- The plan is where the work happens. If the plan's wrong, the agent builds the wrong thing really fast.
-- A good plan has four things.
-- Tasks you can tick off. Not "improve the API", but "add this field, update this test".
-- Acceptance criteria. How do we know it's done?
-- Dependencies. What has to happen first, and what can run in parallel.
-- Verification commands. The exact command that proves each step works.
-- That last one changed the most for me. If the agent knows how to check its own work, it doesn't come back and ask me.
-- I think hard once, up front, and then I don't have to think about it again.
-- This deck had a plan like that. Six tasks, each with acceptance criteria. Two ran in parallel.
+- The plan is where the real work happens. If the plan's wrong, the agent builds the wrong thing really fast.
+- A good plan is a checklist an agent can finish without me. Five things.
+- Small tasks you can tick off. Not "improve the API". More like "add this field, update this test".
+- What done looks like for each one. Otherwise the agent decides, and it's usually generous to itself.
+- Which tasks depend on others. Then everything else can run at the same time.
+- The command that proves it works. If the agent can check its own work, it doesn't come back and ask me.
+- What's known, kept apart from guesses. Agents state guesses very confidently, so I want them labelled.
+- I think hard once, up front. Then I don't have to think about it again.
 
 ## 8. Pick the model, then the effort
 
 - 7:50 to 8:50.
-- My default is Opus 5.5 on medium effort. It answered most in about 970 sessions last month.
-- For the really hard problems I switch to Fable 5.2. I'm on the Claude Ultra plan for that. It's slower and I don't use it much, about a dozen sessions.
-- Haiku for sweeps. Rename this across 200 files, check every page for this one thing.
-- Codex is my reviewer.
-- The bit people skip is effort. I typed `/effort` about 50 times last month and `/model` about 34. I turn effort down more than I turn the model up.
-- Most of the time the model isn't the problem. A vague plan is the problem. A better model on a bad plan just gives you a more confident wrong answer.
+- Two choices every time. Which model, and how much effort.
+- Effort is how long it thinks before it answers. More effort is slower, smarter and costs more.
+- Opus 5.5 on medium effort is my default for almost everything.
+- Fable 5.2 is for the hardest problems, like design or a tricky bug. I'm on the Claude Ultra plan for that.
+- Haiku 5.5 on low effort for quick, cheap searches across lots of files.
+- Codex on high effort reviews every pull request.
+- If you're starting out, leave it on the default. Turn effort up when the answer is wrong, not before.
+- Most of the time the model isn't the problem. A vague plan is. A better model on a bad plan gives you a more confident wrong answer.
 
 Flags:
-- SOURCE: chat-history, Opus 5.5 most in 967 sessions, Fable 5.2 in 11. Fable on Ultra is my stated choice, not measured.
+- SOURCE: chat-history, Opus 5.5 answered most in 967 sessions, Fable 5.2 in 11. `/effort` typed 50 times, `/model` 34.
 
 ## 9. One chat runs the fleet
 
 - 8:50 to 10:10.
-- In May I showed you cmux times 20. That's still true, but I don't drive 20 tabs by hand any more.
-- Now one chat runs the fleet. I use a skill called captain.
-- I give it the work. It splits it into tasks, starts an agent per task, each in its own worktree, and only brings back what needs me.
-- Real example. A big move in my company's monorepo. Eleven workspaces running at once, about 42 PRs out of it.
-- I didn't read 42 PRs line by line. I read the plan, I answered the questions that came back, and I made the calls.
-- Worktrees are what make this safe. Without them, two agents edit the same file and you spend the afternoon untangling it.
-- If you only take one thing from this slide, take worktrees.
+- Once one agent works, the next step is running a few at once. Three things make that possible.
+- Worktrees. A separate copy of the repo for each change, so agents never trip over each other.
+- cmux. A tab per agent. It pings me when one is stuck or done, so I'm not watching twenty tabs.
+- captain. I give it a list. It starts an agent per task and only brings back decisions.
+- A real example. One big move in my company's monorepo this month. 11 agents, about 42 pull requests.
+- I didn't read 42 pull requests line by line. I read the plan, I answered the questions that came back, and I made the calls.
+- Don't start here. Start with one agent. But if you take one thing from this slide, take worktrees.
 
 Flags:
 - No client or app names for the monorepo story. captain: 56 uses in 30 days.
@@ -122,105 +123,132 @@ Flags:
 ## 10. Agents review agents
 
 - 10:10 to 11:10.
-- Every PR gets reviewed by a different agent. For me that's Codex in GitHub.
-- It labels what it finds by priority. Last month it raised about 62 P1s across about 20 sessions.
-- Here's one that mattered. In my company's monorepo, an agent wrote a database migration. It looked fine. Tests passed.
-- Codex flagged a P1. The migration had dropped the version pin on our ORM.
-- That's a one-line change in a big diff. Easy to miss in a skim.
-- The point isn't that Codex is smarter. It's a second pair of eyes that didn't write the code, so it doesn't share the same blind spot.
-- Then the babysitter reads the review and fixes it. Which is the next slide.
+- A second AI model reads every pull request before it merges. For me that's Codex on GitHub.
+- It labels what it finds by priority. P1 means must fix. Last month it raised about 62 of them.
+- Here's one that mattered. In my company's monorepo, an upgrade quietly dropped the pin on our database library. So the app would have run an older version.
+- The tests passed. The diff looked fine. It's one line in a big change, so it's easy to miss in a skim.
+- Codex flagged it as a P1, must fix.
+- Click. The agent fixed it, Codex re-reviewed it, then it merged.
+- The point isn't that Codex is smarter. It didn't write the code, so it doesn't share the same blind spot. Same reason we ask a teammate to review.
 
-## 11. Done means merged
+Flags:
+- One click, for the "fixed, re-reviewed, merged" line. SOURCE: 62 P1 labels across about 20 sessions in 30 days.
 
-- 11:10 to 12:10.
-- In May, a PR being open felt like done. It isn't.
-- `pr-babysitter` watches the PR until it can merge. CI fails, it reads the log and fixes it. Conflicts, it merges main. Review comments, it answers them or fixes them.
-- First thing it checks is whether the failure is infrastructure. A killed job or a flaky runner gets a re-run, not a code change.
+## 11. Write down done first
+
+- 11:10 to 12:00.
+- This one comes from the agent setup at my company. Before an agent starts a task, it gets a checklist of what finished looks like.
+- The agent doing the work can't edit that checklist. So it can't quietly move the goalposts when the work gets hard.
+- When it says it's done, a fresh agent grades it. Fresh means it never saw the work or the reasoning, so it can't be talked into a pass.
+- Every tick needs proof. A line of code, or the output of a command. "Looks good" doesn't count.
+- Click. Of 23 graded tasks, 10 failed. That's the point. A grader that never says no isn't checking anything.
+- If you try one piece of this: write down what done means before you start the agent, not after.
+
+Flags:
+- One click, for the "10 of 23 failed" line. SOURCE: task rubrics and verdict files in my company's factory repo (13 passed, 10 failed). Never name the repo or clients.
+
+## 12. Done means merged
+
+- 12:00 to 13:00.
+- Opening a pull request feels like done. It isn't. Someone still has to get it over the line.
+- `/pr-babysitter` looks after the pull request until it merges.
+- It fixes failing automated checks. That's CI.
+- It updates the branch when main has moved on.
+- It replies to every review comment, or fixes what the comment asked for.
+- And it re-runs flaky checks instead of changing code. If a check failed because the build machine had a bad day, rewriting code is the wrong fix.
 - I used it about 190 times last month.
-- My rule is done means live. Not pushed, not PR open. Merged, deployed, and checked in production.
-- When an agent says it's done, I want to see the commit, the PR state, and what's still pending.
-- That one change took a whole category of "oh, I forgot about that PR" off my plate.
+- My rule is done means live. Merged, deployed, and checked where people use it.
+- That one skill took a whole pile of "oh, I forgot about that PR" off my plate.
 
-## 12. The gates catch wrong code
+## 13. The gates catch wrong code
 
-- 12:10 to 13:10.
-- If agents write most of the code, something has to catch the bad code. For me that's gates.
-- oxfmt formats. oxlint lints. Ultracite ties them together.
-- lefthook runs them on pre-commit and pre-push. So the agent can't commit something that doesn't pass.
-- Then CI runs the lot again. Lint, format, types, build.
-- And the hook from before. Tests only run right before push. While it's working, the agent runs only lint and types on the files it changed.
-- That sounds backwards, but it stops ten agents running the full suite every two minutes.
+- 13:00 to 14:00.
+- If agents write most of the code, something has to catch the bad code. I call these gates. They're automatic checks that run before any code can land.
+- On commit, two things. Format, which fixes spacing and layout. And lint. Lint is a tool that flags likely mistakes in code. I use oxfmt and oxlint, on the changed files only.
+- On push, it runs the same checks as CI. So I find out on my machine, not ten minutes later.
+- In CI, lint, format, types and build, all again.
+- Tests run once, right before the push. Not while the agent is working. Otherwise ten agents run the whole suite every two minutes.
+- One catch. Checks catch broken code, not too much code. Agents love writing extra. `/tidy` handles that.
 - The gates don't care who wrote the code. Same bar for me, for Claude, for Codex.
-- My review time goes on the plan and the decisions. The gates handle the rest.
 
-## 13. Write the repo for the agent
+## 14. Write the repo for the agent
 
-- 13:10 to 14:10.
-- The agent reads your repo before it reads your prompt. So I write the repo for the agent.
-- Monorepos. Turborepo, everything in one place. The agent can see the whole picture.
-- An AGENTS.md at the root. The commands, the layout, the gotchas. Short. If it's wrong, I fix it in the same commit as the change that made it wrong.
-- A real README. Agents read those too.
-- And skills in the repo when the repo needs them.
-- The test I use is simple. Could a new engineer get going from these files alone, without asking anyone? If yes, so can the agent.
-- My scaffold skill sets all of this up for a new Next.js project, so I don't do it by hand.
+- 14:00 to 15:00.
+- Agents start every task with no memory. The repo has to explain itself.
+- So I write the repo for the agent. Four things.
+- A monorepo. Every app in one repo, sharing the same config. The agent sees the whole picture.
+- AGENTS.md. A README for agents: the commands, the layout and the rules. Keep it short. When it's wrong, fix it in the same change.
+- A README. What it is and how to run it, for people. Agents read it too.
+- Skills. Checklists the agent loads for one kind of job, kept in the repo when the repo needs them.
+- My test is simple. Could a new engineer get going from these files alone, without asking anyone? If yes, so can the agent.
 
-## 14. Lazy, not negligent
+## 15. Lazy, not negligent
 
-- 14:10 to 15:10.
-- Agents love writing code. Way too much code. So my global CLAUDE.md has a ladder they climb before writing anything.
+- 15:00 to 16:00.
+- Agents love writing code. Way too much code. So before an agent writes anything, it climbs this ladder.
 - Does this need to exist at all? If not, skip it.
-- Is it already in the codebase? Reuse it. Reimplementing something three files over is the most common slop I see.
+- Already in the codebase? Reuse it. Rewriting something that lives three files over is the most common mess I see.
 - Does the standard library do it? Use that.
 - Does the platform do it? A date input beats a date picker library. CSS beats JavaScript.
-- Is there a dependency already installed? Use it. Don't add a new one for five lines.
-- Can it be one line? Make it one line.
-- Only then write the minimum code that works.
-- The rule is lazy, not negligent. It never cuts validation, error handling, security or accessibility.
+- Does a dependency we already have do it? Use it. Don't add a new one for five lines.
+- One line? One line.
+- Only then, the least code that works.
+- Lazy, not negligent. It never cuts input checks, error handling, security or accessibility.
 
-## 15. Write your working style down
+Flags:
+- SOURCE: global CLAUDE.md "Minimal code" section.
 
-- 15:10 to 16:20.
-- The newest thing I've done is write my working style down as a skill. I call it matt-mode.
-- It's everything I'd tell a new person on day one.
-- Done means live. Not pushed, live.
-- Never block on Matt for reversible work. If it can be undone, decide and tell me after.
-- And a table of the phrases I keep typing, with what each one means. So when I say "ship it", the agent knows exactly what that involves.
+## 16. Write your working style down
+
+- 16:00 to 17:10.
+- matt-mode is a skill that tells agents how I like to work. It's what I'd tell a new teammate on day one.
+- It has a table of things I say and what I mean by them.
+- "Done means live." Merged, deployed and checked where people use it.
+- "You decide." Make the call, do everything high value, and tell me what you chose.
+- "Bypass." Skip the merge checks. Only ever when I say that exact word.
 - Before this, I was the bottleneck. Every agent stopped and asked me small questions.
-- Now only the real decisions come back. The irreversible ones, and the ones where I actually have an opinion.
-- You can write your own in an afternoon. Look at what you keep correcting, and write it down.
+- Now only the real decisions come back.
+- You can write your own. Look at what you keep correcting, and write that down.
 
 Flags:
 - matt-mode is on an unmerged branch of a private repo (`12614ff`). Quote it, don't link it, don't promise to share it.
 
-## 16. My agent skills
+## 17. My agent skills
 
-- 16:20 to 17:30.
-- Everything I've shown you lives in my agent skills. They're open source at github.com/mblode/agent-skills.
-- One command installs all 27 for Claude Code and Codex. It's on the slide.
-- Here's what I actually use, last 30 days. `tidy` about 330 times. `pr-creator` about 200. `pr-babysitter` about 190. Then planning, ui-design, codebase-architecture, captain.
-- So the top three are all about getting a PR from written to merged. That's where the time was going.
-- Every skill started as something I was annoyed at. An agent did the wrong thing, I wrote the rule, and it stopped.
-- When a new model comes out, I go through them again. Sometimes I can delete rules because the model got smarter.
+- 17:10 to 18:20.
+- Everything I've shown you lives in my agent skills. They're open source at github.com/mblode/agent-skills. QR code in the corner.
+- One command installs them for Claude Code and Codex. It's on the slide.
+- Here are the ones I use most, last 30 days.
+- `tidy` reviews and cleans up a change, about 330 times.
+- `pr-creator` writes the pull request, about 200.
+- `pr-babysitter` gets it to merge, about 190.
+- Then planning, ui-design, and codebase-architecture, which shapes code agents can work in.
+- The top three are all about getting a change from written to merged. That's where my time was going.
+- Every skill started as something that annoyed me. An agent did the wrong thing, I wrote the rule, and it stopped.
 
 Flags:
-- SOURCE: chat-history 30 days: tidy 327, pr-creator 201, pr-babysitter 188, planning 93, ui-design 90, codebase-architecture 75, captain 56.
+- SOURCE: chat-history 30 days: tidy 327, pr-creator 201, pr-babysitter 188, planning 93, ui-design 90, codebase-architecture 75.
 
-## 17. Your chat history is a database
+## 18. Your chat history is a database
 
-- 17:30 to 18:40.
-- Every number in this talk came from one place, my chat history.
-- Claude Code and Codex keep every session on your disk. That's thousands of conversations. Every bug you fixed, every decision, every dead end.
-- I have a skill called chat-history that searches all of it. I asked it how many sessions, which skills, which models, and it counted them.
-- But the better use is day to day. "We fixed this before, how?" "Why did we change the plan?" It finds the session and shows me what happened after.
+- 18:20 to 19:30.
+- Every chat with an agent is saved on your machine. Thousands of them. Every bug you fixed, every decision, every dead end.
+- I have a skill called `/chat-history` that searches them.
+- I use it when I think, "we fixed this before". It finds the session and shows me what happened after.
 - It's also how I find what to turn into a skill. If I've typed the same correction ten times, that's a rule waiting to be written.
+- Click. Every number in this talk came from it. I asked how many sessions, which skills, which models, and it counted.
 - You already have this data. Most people never look at it.
 
-## 18. Try one thing tomorrow
+Flags:
+- One click, for the "every number" line.
 
-- 18:40 to 20:00.
-- So, one thing to try tomorrow.
-- Pick the instruction you type most often and turn it into a snippet. Or a skill. Write it once, stop retyping it.
-- If you want a head start, install my skills. Left QR code is the skills repo, right is my uses page with the full setup.
-- And if you try the yolo flag, try it with the hooks and worktrees, and inside our policy.
-- The short version of the whole talk: let the agents run, and put your judgement into the plan, the gates and the skills.
-- Thanks everyone. Ping me on Slack if you want to go deeper on any of it.
+## 19. Try one thing tomorrow
+
+- 19:30 to 20:50.
+- So pick one thing to try tomorrow. Just one.
+- Save your best prompt as a snippet. Write it once, stop retyping it.
+- Ask for a plan before any code. Read it, fix it, then let it build.
+- Let an agent see one pull request through to merge. Watch what it does with the review comments.
+- If you want a head start, the left QR code is my agent skills. The right one is blode.co/uses, with my whole setup.
+- The short version of the talk: let the agents do the work, and put your judgement into the plan, the checks and the skills.
+- Thanks everyone. Ping me on Slack if you want to go deeper.
