@@ -211,7 +211,7 @@ export function SlideIntro() {
           How I use AI
         </Display>
         <Line className="max-w-none" delay={0.5}>
-          Tools, prompts and the flow from idea to merged PR.
+          How I go from an idea to shipped code with AI agents. No experience needed.
         </Line>
         <Enter as="div" delay={0.8} from={LIFT}>
           <Byline />
@@ -229,14 +229,14 @@ export function SlideSinceMay() {
         <div className="flex flex-col gap-[var(--slide-space-4)]">
           <Display size="2xl">Since May</Display>
           <Line className="max-w-[40ch] slide-text-3xl" delay={0.4}>
-            In May it was one prompt and twenty cmux tabs. Now it’s three snippets, a fleet, and
-            agents that see the PR through to merge.
+            In May I ran one prompt in twenty terminal tabs. Now I use three saved prompts, and
+            agents that carry each change all the way to merge.
           </Line>
         </div>
         <div className="grid grid-cols-3 gap-[var(--slide-space-8)]">
-          <Stat delay={0.8} label="Claude Code sessions in 30 days" value="1,694" />
-          <Stat delay={1} label="prompts I typed" value="17.5k" />
-          <Stat delay={1.2} label="Claude Code, with Codex as the reviewer" value="92%" />
+          <Stat delay={0.8} label="conversations with Claude Code in 30 days" value="1,694" />
+          <Stat delay={1} label="messages I typed to agents" value="17.5k" />
+          <Stat delay={1.2} label="of those were Claude Code. Codex mostly reviews." value="92%" />
         </div>
       </Frame>
     </SlideContainer>
@@ -245,12 +245,15 @@ export function SlideSinceMay() {
 
 // From blode.co/uses (editor and terminal, hardware, apps and glue).
 const SETUP = [
-  { name: "Claude Code", body: "Plans, builds and reviews. Almost every session." },
-  { name: "Codex", body: "Reviews every PR on GitHub." },
-  { name: "cmux", body: "A terminal with a tab per agent, and a ping when one needs me." },
-  { name: "captain", body: "One chat that hands work to the fleet." },
-  { name: "Raycast", body: "Snippets for my three prompts." },
-  { name: "iPhone", body: "Agents run on the Mac all day. I merge from my phone." },
+  {
+    name: "Claude Code",
+    body: "An AI agent in the terminal. It reads code, runs commands and makes changes.",
+  },
+  { name: "Codex", body: "OpenAI’s agent. I mostly use it to review pull requests." },
+  { name: "cmux", body: "A terminal app with a tab per agent. It pings me when one needs me." },
+  { name: "captain", body: "My tool: one chat that hands tasks out to many agents." },
+  { name: "Raycast", body: "Text snippets: three letters expand into a full prompt." },
+  { name: "Skills", body: "Saved checklists an agent reads before a kind of job." },
 ] as const;
 
 export function SlideSetup() {
@@ -259,7 +262,6 @@ export function SlideSetup() {
       <Frame className="justify-center gap-[var(--slide-space-12)]">
         <Display size="2xl">My setup</Display>
         <Cells items={SETUP} />
-        <QrCorner data={USES_URL} label="blode.co/uses" />
       </Frame>
     </SlideContainer>
   );
@@ -271,7 +273,7 @@ export function SlideYolo() {
     <SlideContainer palette="e">
       <Frame className="justify-center gap-[var(--slide-space-10)]">
         <Display className="max-w-[18ch]" size="xl">
-          Skip the prompts. Guard the edges.
+          Let it work. Guard the edges.
         </Display>
         <Terminal
           className="w-fit"
@@ -291,13 +293,14 @@ export function SlideYolo() {
         <List
           delay={0.9}
           items={[
-            "Every change gets its own worktree",
-            "Hooks: tests only run right before git push",
-            "CI and a reviewer gate every merge",
+            "This flag stops Claude asking before every command",
+            "Each change happens in its own copy of the repo",
+            "Automated checks and a reviewer must pass before anything merges",
           ]}
         />
         <Line className="max-w-none slide-text-2xl" delay={1.8}>
-          At work, follow the security policy first.
+          New to agents? Keep approvals on until these guardrails exist, and follow your security
+          policy.
         </Line>
       </Frame>
     </SlideContainer>
@@ -308,16 +311,19 @@ export function SlideYolo() {
 const SNIPPETS = [
   {
     key: "zcc",
+    job: "Plan",
     use: "about 50 sessions",
     text: "Do extensive research then make an executable plan with checkable tasks, acceptance criteria, dependencies and verification commands.",
   },
   {
     key: "zep",
+    job: "Build",
     use: "about 130 sessions",
     text: "Execute the agreed plan with parallel subagents on independent tasks. Keep a visible checklist and tick tasks off only with evidence.",
   },
   {
     key: "zgp",
+    job: "Ship",
     use: "about 70 sessions",
     text: "/tidy and Git commit all changes and push all changes and /pr‑creator and /pr‑babysitter",
   },
@@ -327,7 +333,13 @@ export function SlideSnippets() {
   return (
     <SlideContainer palette="e">
       <Frame className="justify-center gap-[var(--slide-space-10)]">
-        <Display size="2xl">Three keystrokes</Display>
+        <div className="flex flex-col gap-[var(--slide-space-4)]">
+          <Display size="2xl">Three keystrokes</Display>
+          <Line className="max-w-none slide-text-3xl" delay={0.3}>
+            A snippet turns three letters into a whole prompt. One to plan, one to build, one to
+            ship.
+          </Line>
+        </div>
         <div className="grid grid-cols-3 gap-[var(--slide-space-6)]">
           {SNIPPETS.map((snippet, index) => (
             <Enter
@@ -342,8 +354,14 @@ export function SlideSnippets() {
               key={snippet.key}
             >
               <p className="flex items-baseline justify-between gap-[var(--slide-space-3)]">
-                <span className="font-mono font-semibold slide-text-4xl" style={{ color: ACCENT }}>
-                  {snippet.key}
+                <span className="flex items-baseline gap-[var(--slide-space-3)]">
+                  <span
+                    className="font-mono font-semibold slide-text-4xl"
+                    style={{ color: ACCENT }}
+                  >
+                    {snippet.key}
+                  </span>
+                  <span className="font-heading font-semibold slide-text-3xl">{snippet.job}</span>
                 </span>
                 <span className="text-[var(--fg-soft)] slide-text-xl">{snippet.use}</span>
               </p>
@@ -357,14 +375,14 @@ export function SlideSnippets() {
 }
 
 const FLOW: readonly FlowStep[] = [
-  { name: "Plan", detail: "/planning, /codebase‑architecture" },
-  { name: "Update the plan", detail: "answer its questions, cut scope" },
-  { name: "Execute", detail: "zep, parallel subagents" },
-  { name: "Tidy", detail: "/tidy, oxfmt, oxlint" },
-  { name: "Open the PR", detail: "/pr-creator" },
-  { name: "Codex reviews", detail: "on GitHub" },
-  { name: "Babysit", detail: "/pr-babysitter" },
-  { name: "Merged and live", detail: "checked in prod" },
+  { name: "Plan", detail: "The agent reads the code and writes a plan" },
+  { name: "Review the plan", detail: "I answer its questions and cut scope" },
+  { name: "Build", detail: "Several agents write the code at once" },
+  { name: "Clean up", detail: "/tidy reviews its own change" },
+  { name: "Open a pull request", detail: "/pr-creator writes it up" },
+  { name: "AI review", detail: "Codex checks it on GitHub" },
+  { name: "Fix until green", detail: "/pr-babysitter handles checks and comments" },
+  { name: "Merged and live", detail: "Checked in production" },
 ];
 
 // One click per step. Model choice sits under the chain.
@@ -378,7 +396,7 @@ export function SlideFlow() {
         </div>
         <FlowChain steps={FLOW} />
         <p className="text-[var(--fg-soft)] slide-text-2xl">
-          Opus 5.5 on medium effort, or Fable 5.2 on Claude Ultra for the hard ones.
+          Model: Opus 5.5 on medium effort. Fable 5.2 for the hardest problems.
         </p>
       </Frame>
     </SlideContainer>
@@ -399,11 +417,11 @@ export function SlidePlan() {
         <List
           delay={0.8}
           items={[
-            "Tasks you can tick off",
-            "Acceptance criteria for each one",
-            "Dependencies, so independent work runs in parallel",
-            "The command that proves it’s done",
-            "Facts kept apart from guesses and open decisions",
+            "Small tasks you can tick off",
+            "What “done” looks like for each one",
+            "Which tasks depend on others, so the rest run at the same time",
+            "The command that proves it works",
+            "What’s known, kept apart from guesses",
           ]}
         />
       </Frame>
@@ -413,10 +431,14 @@ export function SlidePlan() {
 
 // Session counts by the model that answered most, last 30 days.
 const MODELS = [
-  { model: "Opus 5.5", effort: "medium", job: "The default. About 970 sessions." },
-  { model: "Fable 5.2", effort: "Claude Ultra", job: "The hard ones: architecture, nasty bugs." },
-  { model: "Haiku 5.5", effort: "low", job: "Sweeps and scans across many files." },
-  { model: "Codex", effort: "high", job: "The reviewer on every PR." },
+  { model: "Opus 5.5", effort: "medium effort", job: "My default for almost everything." },
+  {
+    model: "Fable 5.2",
+    effort: "Claude Ultra plan",
+    job: "The hardest problems: design, tricky bugs.",
+  },
+  { model: "Haiku 5.5", effort: "low effort", job: "Quick, cheap searches across many files." },
+  { model: "Codex", effort: "high effort", job: "Reviews every pull request." },
 ] as const;
 
 export function SlideModels() {
@@ -442,7 +464,7 @@ export function SlideModels() {
           ))}
         </div>
         <Line className="max-w-none slide-text-2xl" delay={1.5}>
-          I change /effort more often than I change /model.
+          Effort is how long it thinks before it answers. More effort: slower, smarter, costlier.
         </Line>
       </Frame>
     </SlideContainer>
@@ -450,9 +472,15 @@ export function SlideModels() {
 }
 
 const FLEET = [
-  { name: "Worktrees", body: "Every change gets its own copy of the repo, off the latest main." },
+  {
+    name: "Worktrees",
+    body: "A separate copy of the repo for each change, so agents never trip over each other.",
+  },
   { name: "cmux", body: "A tab per agent. It pings me when one is stuck or done." },
-  { name: "captain", body: "Turns a list into workers. Only the decisions come back to me." },
+  {
+    name: "captain",
+    body: "I give it a list. It starts an agent per task and only brings back decisions.",
+  },
 ] as const;
 
 // The captain run: one monorepo move, 2 to 3 November 2026.
@@ -463,7 +491,7 @@ export function SlideParallel() {
         <Display size="2xl">One chat runs the fleet</Display>
         <Cells items={FLEET} />
         <Line className="max-w-none slide-text-3xl" delay={1.2}>
-          One monorepo move this month: 11 agents, about 42 PRs.
+          One big move this month: 11 agents, about 42 pull requests.
         </Line>
       </Frame>
     </SlideContainer>
@@ -475,7 +503,12 @@ export function SlideReview() {
   return (
     <SlideContainer palette="e">
       <Frame className="justify-center gap-[var(--slide-space-10)]">
-        <Display size="2xl">Agents review agents</Display>
+        <div className="flex flex-col gap-[var(--slide-space-4)]">
+          <Display size="2xl">Agents review agents</Display>
+          <Line className="max-w-none slide-text-3xl" delay={0.3}>
+            A second AI model reads every pull request before it merges.
+          </Line>
+        </div>
         <Enter
           as="div"
           className={cn(
@@ -491,20 +524,49 @@ export function SlideReview() {
               className="rounded-[0.3em] px-[0.5em] py-[0.1em] text-[#211f1e]"
               style={{ backgroundColor: ACCENT }}
             >
-              P1
+              P1: must fix
             </span>
             <span className="text-[var(--fg-soft)]">chatgpt-codex-connector</span>
           </p>
           <p className="font-heading font-semibold leading-[1.15] slide-text-4xl">
-            Keep the ORM version pin the migration dropped
+            Keep the database library pinned to the right version
           </p>
           <p className="leading-[1.35] text-[var(--fg-soft)] slide-text-2xl">
-            The lockfile now resolves an older release candidate than the schema needs.
+            An upgrade quietly dropped the pin, so the app would have run an older version.
           </p>
         </Enter>
         <Reveal>
           <Line className="max-w-none text-[var(--fg)] slide-text-4xl" delay={0}>
             The agent fixed it, Codex re-reviewed it, then it merged.
+          </Line>
+        </Reveal>
+      </Frame>
+    </SlideContainer>
+  );
+}
+
+// The task rubric and fresh-context verifier in my company's factory repo.
+export function SlideRubric() {
+  return (
+    <SlideContainer palette="e">
+      <Frame className="justify-center gap-[var(--slide-space-10)]">
+        <div className="flex flex-col gap-[var(--slide-space-4)]">
+          <Display size="2xl">Write down done first</Display>
+          <Line className="max-w-none slide-text-3xl" delay={0.4}>
+            Before an agent starts, it gets a checklist of what finished looks like.
+          </Line>
+        </div>
+        <List
+          delay={0.8}
+          items={[
+            "The agent doing the work can’t edit the checklist",
+            "A fresh agent that never saw the work grades it",
+            "Every tick needs proof: a line of code or a command’s output",
+          ]}
+        />
+        <Reveal>
+          <Line className="max-w-none text-[var(--fg)] slide-text-4xl" delay={0}>
+            Of 23 graded tasks, 10 failed. A grader that never says no isn’t checking.
           </Line>
         </Reveal>
       </Frame>
@@ -520,16 +582,16 @@ export function SlideBabysit() {
         <div className="flex flex-col gap-[var(--slide-space-4)]">
           <Display size="2xl">Done means merged</Display>
           <Line className="max-w-none slide-text-3xl" delay={0.4}>
-            /pr-babysitter keeps going until the PR can merge.
+            A pull request isn’t finished until it merges. /pr-babysitter watches it and:
           </Line>
         </div>
         <List
           delay={0.8}
           items={[
-            "Fixes failing CI",
-            "Resolves conflicts with main",
-            "Answers every review thread",
-            "Re-runs infra flakes instead of changing code",
+            "Fixes failing automated checks (CI)",
+            "Updates it when main has moved on",
+            "Replies to every review comment",
+            "Re-runs flaky checks instead of changing code",
           ]}
         />
       </Frame>
@@ -542,7 +604,12 @@ export function SlideGates() {
   return (
     <SlideContainer palette="e">
       <Frame className="justify-center gap-[var(--slide-space-10)]">
-        <Display size="2xl">The gates catch wrong code</Display>
+        <div className="flex flex-col gap-[var(--slide-space-4)]">
+          <Display size="2xl">The gates catch wrong code</Display>
+          <Line className="max-w-none slide-text-3xl" delay={0.3}>
+            Automatic checks that run before any code can land.
+          </Line>
+        </div>
         <Terminal
           className="w-[80%]"
           delay={0.5}
@@ -551,8 +618,8 @@ export function SlideGates() {
               key: "commit",
               content: (
                 <span>
-                  <span style={{ color: ACCENT }}>pre-commit</span> oxfmt and oxlint --fix on staged
-                  files
+                  <span style={{ color: ACCENT }}>on commit</span> format (oxfmt) and lint (oxlint)
+                  the changed files
                 </span>
               ),
             },
@@ -560,7 +627,7 @@ export function SlideGates() {
               key: "push",
               content: (
                 <span>
-                  <span style={{ color: ACCENT }}>pre-push</span> the same gate as CI
+                  <span style={{ color: ACCENT }}>on push</span> run the same checks as CI
                 </span>
               ),
             },
@@ -568,7 +635,7 @@ export function SlideGates() {
               key: "ci",
               content: (
                 <span>
-                  <span style={{ color: ACCENT }}>CI</span> lint, format, types, build
+                  <span style={{ color: ACCENT }}>in CI</span> lint, format, types, build
                 </span>
               ),
             },
@@ -583,7 +650,7 @@ export function SlideGates() {
           ]}
         />
         <Line className="max-w-none slide-text-3xl" delay={1.2}>
-          They don’t catch too much code. That’s what /tidy is for.
+          Checks catch broken code, not too much code. /tidy handles that.
         </Line>
       </Frame>
     </SlideContainer>
@@ -591,8 +658,8 @@ export function SlideGates() {
 }
 
 const REPO = [
-  { name: "Monorepo", body: "One clone, every app, shared config with turborepo." },
-  { name: "AGENTS.md", body: "Commands, layout and rules. The onboarding doc for agents." },
+  { name: "Monorepo", body: "Every app in one repo, sharing the same config." },
+  { name: "AGENTS.md", body: "A README for agents: commands, layout and rules." },
   { name: "README", body: "What it is and how to run it, for people." },
   { name: "Skills", body: "Checklists the agent loads for one kind of job." },
 ] as const;
@@ -604,7 +671,10 @@ export function SlideRepo() {
         <Display className="max-w-[16ch]" size="2xl">
           Write the repo for the agent
         </Display>
-        <Cells columns={4} items={REPO} />
+        <Line className="max-w-none slide-text-3xl" delay={0.3}>
+          Agents start every task with no memory. The repo has to explain itself.
+        </Line>
+        <Cells columns={4} delay={0.7} items={REPO} />
       </Frame>
     </SlideContainer>
   );
@@ -643,7 +713,7 @@ export function SlideLadder() {
           ))}
         </ol>
         <Line className="max-w-none slide-text-2xl" delay={1.8}>
-          YAGNI and DRY, written down so the agent follows them too.
+          “You aren’t gonna need it”, written down so the agent follows it too.
         </Line>
       </Frame>
     </SlideContainer>
@@ -654,7 +724,7 @@ export function SlideLadder() {
 const MATT_MODE = [
   { said: "“Done means live.”", means: "Merged, deployed and checked where people use it." },
   { said: "“You decide.”", means: "Make the call, do everything high value, say what you chose." },
-  { said: "“Bypass.”", means: "Admin merge now. Never without that word." },
+  { said: "“Bypass.”", means: "Skip the merge checks. Only ever when I say that word." },
 ] as const;
 
 export function SlideMattMode() {
@@ -664,7 +734,7 @@ export function SlideMattMode() {
         <div className="flex flex-col gap-[var(--slide-space-4)]">
           <Display size="xl">Write your working style down</Display>
           <Line className="max-w-none slide-text-3xl" delay={0.4}>
-            matt-mode is a skill that explains how I like to work.
+            matt-mode is a skill that tells agents how I like to work.
           </Line>
         </div>
         <div className="flex flex-col">
@@ -690,21 +760,24 @@ export function SlideMattMode() {
 
 // Skill tool calls in the last 30 days, from ~/.claude history.
 const TOP_SKILLS = [
-  { name: "tidy", uses: 327 },
-  { name: "pr-creator", uses: 201 },
-  { name: "pr-babysitter", uses: 188 },
-  { name: "planning", uses: 93 },
-  { name: "ui-design", uses: 90 },
-  { name: "codebase-architecture", uses: 75 },
+  { name: "tidy", does: "reviews and cleans up a change", uses: 327 },
+  { name: "pr-creator", does: "writes the pull request", uses: 201 },
+  { name: "pr-babysitter", does: "gets it to merge", uses: 188 },
+  { name: "planning", does: "writes the plan", uses: 93 },
+  { name: "ui-design", does: "builds and checks UI", uses: 90 },
+  { name: "codebase-architecture", does: "shapes code agents can work in", uses: 75 },
 ] as const;
 
 export function SlideSkills() {
-  const most = TOP_SKILLS[0].uses;
-
   return (
     <SlideContainer palette="e">
       <Frame className="justify-center gap-[var(--slide-space-8)]">
-        <Display size="2xl">My agent skills</Display>
+        <div className="flex flex-col gap-[var(--slide-space-4)]">
+          <Display size="2xl">My agent skills</Display>
+          <Line className="max-w-none slide-text-3xl" delay={0.3}>
+            The ones I use most, and how often in the last 30 days.
+          </Line>
+        </div>
         <Terminal
           className="w-fit"
           delay={0.4}
@@ -715,22 +788,20 @@ export function SlideSkills() {
             },
           ]}
         />
-        <div className="flex w-[64%] flex-col gap-[var(--slide-space-3)]">
+        <div className="flex w-[70%] flex-col gap-[var(--slide-space-3)]">
           {TOP_SKILLS.map((skill, index) => (
             <Enter
               as="div"
-              className="grid grid-cols-[14em_1fr_3em] items-center gap-[var(--slide-space-4)] slide-text-2xl"
+              className="grid grid-cols-[14em_1fr_3em] items-baseline gap-[var(--slide-space-4)] slide-text-2xl"
               delay={0.8 + index * 0.12}
               from={LIFT}
               key={skill.name}
             >
               <span className="whitespace-nowrap font-mono">{skill.name}</span>
-              <span
-                aria-hidden="true"
-                className="h-[0.5em] rounded-full"
-                style={{ backgroundColor: ACCENT, width: `${(skill.uses / most) * 100}%` }}
-              />
-              <span className="text-right tabular-nums text-[var(--fg-soft)]">{skill.uses}</span>
+              <span className="text-[var(--fg-soft)]">{skill.does}</span>
+              <span className="text-right tabular-nums" style={{ color: ACCENT }}>
+                {skill.uses}
+              </span>
             </Enter>
           ))}
         </div>
@@ -749,8 +820,8 @@ export function SlideHistory() {
           Your chat history is a database
         </Display>
         <Line className="max-w-[40ch] slide-text-3xl" delay={0.5}>
-          “We fixed this before.” /chat-history searches every Claude Code and Codex session for the
-          decision and what came after it.
+          Every chat with an agent is saved on your machine. /chat-history searches them when you
+          think, “we fixed this before”.
         </Line>
         <Reveal>
           <Line className="max-w-none text-[var(--fg)] slide-text-4xl" delay={0}>
@@ -772,8 +843,8 @@ export function SlideClose() {
             delay={0.5}
             items={[
               "Save your best prompt as a snippet",
-              "Plan before you build",
-              "Let an agent babysit one PR to merge",
+              "Ask for a plan before any code",
+              "Let an agent see one pull request through to merge",
             ]}
           />
           <Enter as="div" className="flex gap-[var(--slide-space-8)]" delay={1.2} from={LIFT}>
