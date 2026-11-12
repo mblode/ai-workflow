@@ -4,8 +4,8 @@ How code gets to production. Release processes, environment promotion, rollback 
 
 ## Vercel project
 
-- Linked to `blode/ai-workflow`, created 13 Nov 2026 from the GitHub repo `mblode/ai-workflow`, with the framework preset set to Next.js and Node 24.x.
-- Production alias: `https://ai-workflow.vercel.app`, public (Vercel Authentication spares production aliases). blode.co's zone proxies to it through an `originOverride` entry in `blode-co/apps/web/lib/zones.ts`, the same way `you-have-taste` is served.
+- Linked to `blode/ai-workflow` (project id `prj_7Z0RL1lv6c9HYoFrTT8OmLgpPvUO`, team `team_cJOlCoBMmSv2540Fe6RGl7Nr`), created 13 Nov 2026 from the GitHub repo `mblode/ai-workflow`, with the framework preset set to Next.js and Node 24.x.
+- Production alias: `https://ai-workflow-six.vercel.app` (`ai-workflow.vercel.app` belongs to another account), public (Vercel Authentication spares production aliases). blode.co's zone proxies to it through an `originOverride` entry in `blode-co/apps/web/lib/zones.ts`, the same way `you-have-taste` is served.
 - The framework preset must be Next.js. A project created as "Other" serves every path as a platform 404.
 - Canonical production URL: `https://blode.co/ai-workflow`.
 - The app is mounted below `/ai-workflow`, so do not publish a `vercel.app` URL or a subdomain as its canonical URL.
