@@ -81,67 +81,11 @@ try {
           );
         })
         .map((node) => ({ tag: node.tagName, text: node.textContent?.slice(0, 150) }));
-      // A sticker never covers a word. Compare each sticker's box, trimmed of
-      // the transparent margin around the art, with the line boxes of every
-      // visible run of text. Stickers inside a pill token sit beside their
-      // word by design and carry no data-sticker.
-      const lineBoxes = [];
-      const walker = document.createTreeWalker(stage, NodeFilter.SHOW_TEXT);
-      for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-        const element = node.parentElement;
-        if (!node.textContent?.trim() || !element || element.closest(".sr-only")) {
-          continue;
-        }
-        // Faded out, by itself or by a wrapper (the day cards under the top one).
-        let faded = false;
-        for (let node = element; node && node !== stage; node = node.parentElement) {
-          if (Number(getComputedStyle(node).opacity) < 0.05) {
-            faded = true;
-            break;
-          }
-        }
-        if (faded) {
-          continue;
-        }
-        const range = document.createRange();
-        range.selectNodeContents(node);
-        for (const rect of range.getClientRects()) {
-          if (rect.width > 0 && rect.height > 0) {
-            lineBoxes.push({ rect, text: node.textContent.trim().slice(0, 60) });
-          }
-        }
-      }
-      // Rolling counters change their text as they roll, so take the box.
-      for (const counter of stage.querySelectorAll("[data-count]")) {
-        lineBoxes.push({ rect: counter.getBoundingClientRect(), text: "(counter)" });
-      }
-      const covered = [...stage.querySelectorAll("[data-sticker] img")].flatMap((image) => {
-        const box = image.getBoundingClientRect();
-        const inset = Math.min(box.width, box.height) * 0.12;
-        const art = {
-          left: box.left + inset,
-          right: box.right - inset,
-          top: box.top + inset,
-          bottom: box.bottom - inset,
-        };
-        return lineBoxes
-          .filter(
-            ({ rect }) =>
-              rect.left < art.right &&
-              rect.right > art.left &&
-              rect.top < art.bottom &&
-              rect.bottom > art.top,
-          )
-          .map(({ text }) => ({ sticker: image.closest("[data-sticker]")?.className, text }));
-      });
-      return { heading: stage.querySelector("h1,h2")?.textContent, overflow, covered };
+      return { heading: stage.querySelector("h1,h2")?.textContent, overflow };
     });
     results.push({ slide, ...result });
     if (result.overflow.length) {
       issues.push({ kind: "overflow", slide, elements: result.overflow });
-    }
-    if (result.covered.length) {
-      issues.push({ kind: "sticker-covers-text", slide, elements: result.covered });
     }
     await page.screenshot({ path: `${out}/slide-${id}-built.png` });
   }

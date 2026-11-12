@@ -4,11 +4,11 @@
 //   npm run build && npm start      # in one terminal
 //   npm run export-pptx             # in another
 //
-// Each slide is a 3840x2160 screenshot of the real deck, so fonts and stickers
-// match exactly but the text isn't editable. Every reveal is another full
+// Each slide is a 3840x2160 screenshot of the real deck, so the fonts match
+// exactly but the text isn't editable. Every reveal is another full
 // frame stacked on top that fades in on click; pixels that don't change don't
-// visibly fade, so only the new part appears. Entrance motion (dealt cards,
-// rolling digits) becomes that fade. Notes come from
+// visibly fade, so only the new part appears. Entrance motion becomes that
+// fade. Notes come from
 // docs/ai-workflow-speaker-notes.md, the same beats as the presenter window, with
 // everything under a `Flags:` line left out.
 //
@@ -24,7 +24,7 @@ import { parseSpeakerNotes } from "../packages/deck-presenter/src/speaker-notes.
 import { captureDeck, deckUrlFromArgs, launchBrowser } from "./capture-deck.mjs";
 
 const OUT = process.env.OUT ?? "out/ai-workflow.pptx";
-const DECK_TITLE = "Claude doesn’t have taste. You do.";
+const DECK_TITLE = "How I use AI";
 // Matches the dark slides, so the fade between slides never flashes white.
 const BACKGROUND = "201F1D";
 const FADE_MS = 400;
@@ -89,7 +89,7 @@ try {
   pres.layout = "LAYOUT_16x9";
   pres.title = DECK_TITLE;
   pres.author = "Matthew Blode";
-  pres.subject = "Claude for Marketing, Melbourne, 5 November 2026";
+  pres.subject = "Sharing AI tools and workflow, Linktree, 13 November 2026";
   // A real title on every slide, parked just above it so it never shows: the
   // slide lists and screen readers read it, and PowerPoint's accessibility
   // checker stops reporting every slide as untitled.

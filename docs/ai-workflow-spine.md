@@ -23,8 +23,8 @@
 | 9 | One chat runs the fleet | agent-skills `captain` skill (56 uses in 30 days); cmux; global CLAUDE.md worktree rule; story from my company's monorepo: 11 workspaces and about 42 PRs in one move |
 | 10 | Agents review agents | Codex GitHub review in chat-history: 62 P1 labels across about 20 sessions; story: a P1 caught an ORM version pin that a migration dropped, in my company's monorepo |
 | 11 | Write down done first | The task rubric and fresh-context verifier in my company's factory repo: the building agent cannot edit the rubric, a verifier with no shared context grades it and must cite file and line or command output; 23 verdicts, 13 passed and 10 failed. Repo and clients never named |
-| 12 | Done means merged | agent-skills `pr-babysitter` (188 uses in 30 days): CI, conflicts and review threads until the PR can merge; matt-mode "Done means live" |
-| 13 | The gates catch wrong code | Toolchain in Done Bear, blode-co and scaffold-nextjs: oxfmt, oxlint, ultracite, lefthook pre-commit and pre-push, knip, CI checks; the test-before-push hook |
+| 12 | Open isn’t done | agent-skills `pr-babysitter` (188 uses in 30 days): CI, conflicts and review threads until the PR can merge; matt-mode "Done means live" |
+| 13 | The checks catch broken code | Toolchain in Done Bear, blode-co and scaffold-nextjs: oxfmt, oxlint, ultracite, lefthook pre-commit and pre-push, knip, CI checks; the test-before-push hook |
 | 14 | Write the repo for the agent | Root AGENTS.md in donebear and the agent-skills `scaffold-nextjs` skill; turborepo monorepos; `agents-md` and `readme` skills |
 | 15 | Lazy, not negligent | Global CLAUDE.md, "Minimal code" section (the seven-rung ladder) |
 | 16 | Write your working style down | matt-mode skill, unmerged branch `matt-mode` of agent-skills-private (`12614ff`, `skills/matt-mode/SKILL.md`): "Done means live", "Never block on Matt for reversible work" (from factory-mode), the stock-phrases table. Quoted, not linked |

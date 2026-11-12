@@ -1,3 +1,4 @@
+import type { ComponentType } from "react";
 import { notFound } from "next/navigation";
 import {
   SlideBabysit,
@@ -24,28 +25,31 @@ import { SlideNavigation } from "@/components/slides/slide-navigation";
 import { SITE_URL } from "@/lib/site-url";
 import { DECK_TITLE, SLIDES, TOTAL_SLIDES } from "@/lib/slides";
 
-// Order matches SLIDES in lib/slides.ts.
-const slideComponents = [
-  SlideIntro,
-  SlideSinceMay,
-  SlideSetup,
-  SlideYolo,
-  SlideSnippets,
-  SlideFlow,
-  SlidePlan,
-  SlideModels,
-  SlideParallel,
-  SlideReview,
-  SlideRubric,
-  SlideBabysit,
-  SlideGates,
-  SlideRepo,
-  SlideLadder,
-  SlideMattMode,
-  SlideSkills,
-  SlideHistory,
-  SlideClose,
-];
+type SlideSlug = (typeof SLIDES)[number]["slug"];
+
+// Keyed by slug, so a slide added to SLIDES without a component fails the
+// type check instead of showing the wrong slide.
+const slideComponents = {
+  intro: SlideIntro,
+  "since-may": SlideSinceMay,
+  setup: SlideSetup,
+  yolo: SlideYolo,
+  snippets: SlideSnippets,
+  flow: SlideFlow,
+  plan: SlidePlan,
+  models: SlideModels,
+  parallel: SlideParallel,
+  review: SlideReview,
+  rubric: SlideRubric,
+  babysit: SlideBabysit,
+  gates: SlideGates,
+  repo: SlideRepo,
+  ladder: SlideLadder,
+  "matt-mode": SlideMattMode,
+  skills: SlideSkills,
+  history: SlideHistory,
+  close: SlideClose,
+} satisfies Record<SlideSlug, ComponentType>;
 
 export function generateStaticParams() {
   const params: { slide: string }[] = [];
@@ -99,7 +103,7 @@ export default async function SlidePage({ params }: { params: Promise<{ slide: s
     notFound();
   }
 
-  const SlideContent = slideComponents[slideNum - 1];
+  const SlideContent = slideComponents[SLIDES[slideNum - 1].slug];
   const { palette } = SLIDES[slideNum - 1];
 
   return (

@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./motion.css";
-@import "./slides.css";
 
 /* Tailwind skips node_modules, so name the presenter package's classes. */
 @source "../packages/deck-presenter/src";
@@ -180,18 +179,6 @@
   100% {
     font-weight: 720;
     letter-spacing: -0.025em;
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes kinetic-rise {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
     opacity: 1;
     transform: translateY(0);
   }
@@ -421,140 +408,6 @@ html[data-idle] * {
   }
 }
 
-.slide-gap-1 {
-  gap: var(--slide-space-1);
-}
-
-.slide-gap-2 {
-  gap: var(--slide-space-2);
-}
-
-.slide-gap-3 {
-  gap: var(--slide-space-3);
-}
-
-.slide-gap-4 {
-  gap: var(--slide-space-4);
-}
-
-.slide-gap-5 {
-  gap: var(--slide-space-5);
-}
-
-.slide-gap-6 {
-  gap: var(--slide-space-6);
-}
-
-.slide-gap-8 {
-  gap: var(--slide-space-8);
-}
-
-.slide-gap-10 {
-  gap: var(--slide-space-10);
-}
-
-.slide-gap-12 {
-  gap: var(--slide-space-12);
-}
-
-.slide-p-4 {
-  padding: var(--slide-space-4);
-}
-
-.slide-p-6 {
-  padding: var(--slide-space-6);
-}
-
-.slide-p-8 {
-  padding: var(--slide-space-8);
-}
-
-.slide-p-10 {
-  padding: var(--slide-space-10);
-}
-
-.slide-p-12 {
-  padding: var(--slide-space-12);
-}
-
-.slide-py-4 {
-  padding-top: var(--slide-space-4);
-  padding-bottom: var(--slide-space-4);
-}
-
-.slide-py-6 {
-  padding-top: var(--slide-space-6);
-  padding-bottom: var(--slide-space-6);
-}
-
-.slide-py-8 {
-  padding-top: var(--slide-space-8);
-  padding-bottom: var(--slide-space-8);
-}
-
-.slide-px-4 {
-  padding-left: var(--slide-space-4);
-  padding-right: var(--slide-space-4);
-}
-
-.slide-px-6 {
-  padding-left: var(--slide-space-6);
-  padding-right: var(--slide-space-6);
-}
-
-.slide-px-8 {
-  padding-left: var(--slide-space-8);
-  padding-right: var(--slide-space-8);
-}
-
-.slide-mb-4 {
-  margin-bottom: var(--slide-space-4);
-}
-
-.slide-mb-6 {
-  margin-bottom: var(--slide-space-6);
-}
-
-.slide-mb-8 {
-  margin-bottom: var(--slide-space-8);
-}
-
-.slide-mt-4 {
-  margin-top: var(--slide-space-4);
-}
-
-.slide-mt-6 {
-  margin-top: var(--slide-space-6);
-}
-
-.slide-mt-8 {
-  margin-top: var(--slide-space-8);
-}
-
-.slide-mt-10 {
-  margin-top: var(--slide-space-10);
-}
-
-.slide-rounded-sm {
-  border-radius: var(--slide-radius-sm);
-}
-
-.slide-rounded-md {
-  border-radius: var(--slide-radius-md);
-}
-
-.slide-rounded-lg {
-  border-radius: var(--slide-radius-lg);
-}
-
-.slide-rounded-xl {
-  border-radius: var(--slide-radius-xl);
-}
-
-.slide-rounded-2xl {
-  border-radius: var(--slide-radius-2xl);
-}
-
 /* ------------------------------------------------------------------ */
 /* Honkish primitives                                                  */
 /* ------------------------------------------------------------------ */
@@ -567,7 +420,6 @@ html[data-idle] * {
   padding-bottom: 0.15em;
   text-wrap: balance;
   hanging-punctuation: first last;
-  will-change: transform, opacity;
   animation: display-settle var(--motion-duration-settle) var(--ease-enter) both;
 }
 
@@ -601,79 +453,10 @@ html[data-idle] * {
   border-color: var(--bg);
 }
 
-.honk-block {
-  border: 1.5px solid var(--fg);
-  border-radius: var(--slide-radius-xl);
-  padding: var(--slide-space-6);
-  position: relative;
-  background: transparent;
-  transition:
-    background 220ms var(--motion-ease),
-    color 220ms var(--motion-ease);
-}
-
-.honk-block[data-tone="plain"] {
-  border-color: transparent;
-}
-
-.honk-block[data-tone="solid"] {
-  background: var(--fg);
-  color: var(--bg);
-}
-
-.honk-hairline {
-  height: 1px;
-  background: var(--hairline);
-  width: 100%;
-}
-
-.honk-hairline-v {
-  width: 1px;
-  background: var(--hairline);
-  align-self: stretch;
-}
-
-.honk-numeral {
-  font-family: var(--font-glide);
-  font-weight: 700;
-  font-size: var(--slide-text-7xl);
-  line-height: 0.85;
-  letter-spacing: -0.04em;
-  color: var(--fg-soft);
-  font-variant-numeric: tabular-nums;
-}
-
-.honk-stagger > * {
-  opacity: 0;
-  will-change: transform, opacity;
-  animation: kinetic-rise var(--motion-duration-enter) var(--motion-ease) forwards;
-  animation-delay: calc(var(--stagger-i, 0) * 50ms + 80ms);
-}
-
-.honk-fade-up {
-  will-change: transform, opacity;
-  animation: kinetic-rise var(--motion-duration-enter) var(--motion-ease) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .honk-display,
-  .honk-stagger > *,
-  .honk-fade-up {
+  .honk-display {
     animation-duration: 0.01ms !important;
     animation-delay: 0ms !important;
-  }
-}
-
-/* ------------------------------------------------------------------ */
-/* Phones: no stagger on the outline page                               */
-/* ------------------------------------------------------------------ */
-@media (max-width: 767px) {
-  .honk-fade-up,
-  .honk-stagger > * {
-    animation: none;
-    opacity: 1;
-    transform: none;
-    will-change: auto;
   }
 }
 

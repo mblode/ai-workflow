@@ -17,8 +17,8 @@ import { ImageResponse } from "next/og";
  * 1. **Satori cannot read woff2.** It throws `Unsupported OpenType signature
  *    wOF2`, a hard error rather than a silent fallback, so the variable woff2
  *    this app serves to browsers is unusable here. `lib/og-assets/` holds
- *    static TTF cuts instanced at wght 400 and 600 and subset to Latin-1 plus
- *    punctuation. Copy those files; do not regenerate them.
+ *    a static TTF cut instanced at wght 600 and subset to Latin-1 plus
+ *    punctuation. Copy that file; do not regenerate it.
  * 2. **Satori parses neither `oklch()` nor CSS variables**, so every colour
  *    passed in must be a hand-synced sRGB literal.
  * 3. **This is a `.tsx` route and must stay one.** Next emits a *static*
