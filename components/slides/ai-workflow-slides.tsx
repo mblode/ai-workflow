@@ -133,6 +133,41 @@ function Terminal({
   );
 }
 
+/** A file or a command's output, shown as it is on disk. */
+function Code({
+  label,
+  children,
+  className,
+  delay = 0.6,
+}: {
+  label: string;
+  children: ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  return (
+    <Enter
+      as="div"
+      className={cn(
+        "flex flex-col gap-[var(--slide-space-3)] p-[var(--slide-space-6)]",
+        PANEL,
+        RADIUS,
+        className,
+      )}
+      delay={delay}
+      from={LIFT}
+    >
+      <p className="font-mono text-[var(--fg-soft)] slide-text-lg">{label}</p>
+      <pre className="whitespace-pre-wrap font-mono leading-[1.45] slide-text-xl">{children}</pre>
+    </Enter>
+  );
+}
+
+/** Accent ink inside a Code panel. */
+function Hi({ children }: { children: ReactNode }) {
+  return <span style={{ color: ACCENT }}>{children}</span>;
+}
+
 /** Headshot and name. */
 function Byline() {
   return (
@@ -210,7 +245,8 @@ export function SlideIntro() {
           How I use AI
         </Display>
         <Line className="max-w-none" delay={0.5}>
-          How I go from an idea to shipped code with AI agents. No experience needed.
+          The exact prompts, files and checks that take a ticket to a merged pull request. Copy any
+          of them.
         </Line>
         <Enter as="div" delay={0.8} from={LIFT}>
           <Byline />
@@ -220,16 +256,15 @@ export function SlideIntro() {
   );
 }
 
-// The May talk is blode.co/ai-usage (Unblocking Yourself with AI, 14 May 2026).
-export function SlideSinceMay() {
+export function SlideNumbers() {
   return (
     <SlideContainer palette="e">
       <Frame className="justify-center gap-[var(--slide-space-10)]">
         <div className="flex flex-col gap-[var(--slide-space-4)]">
-          <Display size="2xl">Since May</Display>
+          <Display size="2xl">30 days, by the numbers</Display>
           <Line className="max-w-[40ch] slide-text-3xl" delay={0.4}>
-            In May I ran one prompt in twenty terminal tabs. Now I use three saved prompts, and
-            agents that carry each change all the way to merge.
+            Most of those messages are three letters long. The rest of this talk is what the letters
+            expand into.
           </Line>
         </div>
         <div className="grid grid-cols-3 gap-[var(--slide-space-8)]">
@@ -248,15 +283,12 @@ export function SlideSinceMay() {
 
 // From blode.co/uses (editor and terminal, hardware, apps and glue).
 const SETUP = [
-  {
-    name: "Claude Code",
-    body: "An AI agent in the terminal. It reads code, runs commands and makes changes.",
-  },
-  { name: "Codex", body: "OpenAI’s agent. I mostly use it to review pull requests." },
-  { name: "cmux", body: "A terminal app with a tab per agent. It pings me when one needs me." },
-  { name: "captain", body: "My tool: one chat that hands tasks out to many agents." },
+  { name: "Claude Code", body: "My main agent. Opus 5.5 at medium effort, in auto mode." },
+  { name: "Codex", body: "Reviews every pull request on GitHub. About 8% of my chats." },
+  { name: "cmux", body: "A terminal with a tab per agent. It pings me when one needs me." },
+  { name: "captain", body: "My tool: one chat that starts an agent per task." },
   { name: "Raycast", body: "Text snippets: three letters expand into a full prompt." },
-  { name: "Skills", body: "Saved checklists an agent reads before a kind of job." },
+  { name: "Skills", body: "27 markdown files. An agent reads one before that kind of job." },
 ] as const;
 
 export function SlideSetup() {
@@ -291,19 +323,29 @@ export function SlideYolo() {
                 </span>
               ),
             },
+            {
+              key: "b",
+              content: (
+                <span>
+                  <span className="text-[var(--fg-soft)]">alias </span>co=
+                  <span style={{ color: ACCENT }}>
+                    {`"codex --dangerously-bypass-approvals-and-sandbox"`}
+                  </span>
+                </span>
+              ),
+            },
           ]}
         />
         <List
           delay={0.9}
           items={[
-            "This flag stops Claude asking before every command",
-            "Each change happens in its own copy of the repo",
-            "Automated checks and a reviewer must pass before anything merges",
+            "One git worktree per change, so agents never share files",
+            "Hooks: no tests until git push, no whole-file reads over 400 lines",
+            "Nothing merges until CI passes and Codex has reviewed it",
           ]}
         />
         <Line className="max-w-none slide-text-2xl" delay={1.8}>
-          New to agents? Keep approvals on until these guardrails exist, and follow your security
-          policy.
+          Don’t copy the flags without the guardrails, and follow your security policy.
         </Line>
       </Frame>
     </SlideContainer>
@@ -339,8 +381,8 @@ export function SlideSnippets() {
         <div className="flex flex-col gap-[var(--slide-space-4)]">
           <Display size="2xl">Three keystrokes</Display>
           <Line className="max-w-none slide-text-3xl" delay={0.3}>
-            A snippet turns three letters into a whole prompt. One to plan, one to build, one to
-            ship.
+            Raycast expands three letters into a whole prompt. One to plan, one to build, one to
+            ship. Screenshot this.
           </Line>
         </div>
         <div className="grid grid-cols-3 gap-[var(--slide-space-6)]">
@@ -378,14 +420,14 @@ export function SlideSnippets() {
 }
 
 const FLOW: readonly FlowStep[] = [
-  { name: "Plan", detail: "The agent reads the code and writes a plan" },
+  { name: "Plan", detail: "zcc with /planning. Out comes docs/plans/<slug>.md" },
   { name: "Review the plan", detail: "I answer its questions and cut scope" },
-  { name: "Build", detail: "Several agents write the code at once" },
-  { name: "Clean up", detail: "/tidy reviews its own change" },
-  { name: "Open a pull request", detail: "/pr-creator writes it up" },
-  { name: "AI review", detail: "Codex checks it on GitHub" },
-  { name: "Fix until green", detail: "/pr-babysitter handles checks and comments" },
-  { name: "Merged and live", detail: "Checked in production" },
+  { name: "Build", detail: "zep. One subagent per independent task" },
+  { name: "Clean up", detail: "/tidy reads the diff in five passes, then fixes it" },
+  { name: "Open a pull request", detail: "/pr-creator writes the title and body" },
+  { name: "AI review", detail: "Codex on GitHub. P1 means must fix" },
+  { name: "Fix until green", detail: "/pr-babysitter: conflicts, CI, review threads" },
+  { name: "Merged and live", detail: "Smoke-tested in production" },
 ];
 
 // One click per step. Model choice sits under the chain.
@@ -403,27 +445,51 @@ export function SlideFlow() {
   );
 }
 
-// The planning skill, and the zcc snippet's own checklist.
+// The plan contract in the planning skill (github.com/mblode/agent-skills),
+// each section cut to one line. The closing quote is from its Gotchas.
+const PLAN_CONTRACT = [
+  { name: "Outcome", body: "the problem, the intended behaviour, acceptance criteria" },
+  { name: "Approach", body: "the smallest slice, and the files and interfaces it touches" },
+  { name: "Decisions", body: "question, choice, evidence, what would flip it" },
+  { name: "Boundaries", body: "what a reader might mistake for scope" },
+  { name: "Verification", body: "a command or test tied to each acceptance criterion" },
+  { name: "Recovery", body: "rollback for migrations and irreversible writes" },
+] as const;
+
 export function SlidePlan() {
   return (
     <SlideContainer palette="e">
-      <Frame className="justify-center gap-[var(--slide-space-10)]">
+      <Frame className="justify-center gap-[var(--slide-space-8)]">
         <div className="flex flex-col gap-[var(--slide-space-4)]">
           <Display size="2xl">Think really hard once</Display>
           <Line className="max-w-none slide-text-3xl" delay={0.4}>
-            A good plan is a checklist an agent can finish without me.
+            Every plan /planning writes has the same sections.
           </Line>
         </div>
-        <List
-          delay={0.8}
-          items={[
-            "Small tasks you can tick off",
-            "What “done” looks like for each one",
-            "Which tasks depend on others, so the rest run at the same time",
-            "The command that proves it works",
-            "What’s known, kept apart from guesses",
-          ]}
-        />
+        <Enter
+          as="div"
+          className={cn(
+            "flex w-[84%] flex-col gap-[var(--slide-space-3)] p-[var(--slide-space-6)]",
+            PANEL,
+            RADIUS,
+          )}
+          delay={0.7}
+          from={LIFT}
+        >
+          <p className="font-mono text-[var(--fg-soft)] slide-text-lg">
+            skills/planning/SKILL.md, Plan contract
+          </p>
+          {PLAN_CONTRACT.map((row) => (
+            <p className="grid grid-cols-[9em_1fr] font-mono slide-text-xl" key={row.name}>
+              <span style={{ color: ACCENT }}>{row.name}</span>
+              <span>{row.body}</span>
+            </p>
+          ))}
+        </Enter>
+        <Line className="max-w-[52ch] text-[var(--fg)] slide-text-2xl" delay={1.2}>
+          “A bare ‘run tests’ step does not establish the changed behavior. Name the acceptance
+          scenario and expected result.”
+        </Line>
       </Frame>
     </SlideContainer>
   );
@@ -464,7 +530,8 @@ export function SlideModels() {
           ))}
         </div>
         <Line className="max-w-none slide-text-2xl" delay={1.5}>
-          Effort is how long it thinks before it answers. More effort: slower, smarter, costlier.
+          In 30 days I typed /effort 50 times and /model 34. Turn effort up when the answer is
+          wrong, not before.
         </Line>
       </Frame>
     </SlideContainer>
@@ -474,7 +541,7 @@ export function SlideModels() {
 const FLEET = [
   {
     name: "Worktrees",
-    body: "A separate copy of the repo for each change, so agents never trip over each other.",
+    body: "git worktree add, once per change. Agents never share a working tree.",
   },
   { name: "cmux", body: "A tab per agent. It pings me when one is stuck or done." },
   {
@@ -574,107 +641,144 @@ export function SlideRubric() {
   );
 }
 
-// The pr-babysitter skill.
+// The Monitor Loop checklist and the one-shot stop rule, both from the
+// pr-babysitter skill. The last checklist line is shortened.
 export function SlideBabysit() {
   return (
     <SlideContainer palette="e">
-      <Frame className="justify-center gap-[var(--slide-space-10)]">
+      <Frame className="justify-center gap-[var(--slide-space-8)]">
         <div className="flex flex-col gap-[var(--slide-space-4)]">
           <Display size="2xl">Open isn’t done</Display>
           <Line className="max-w-none slide-text-3xl" delay={0.4}>
-            A pull request isn’t finished until it merges. /pr-babysitter watches it and:
+            /pr-babysitter runs this loop on every CI event until the pull request merges.
           </Line>
         </div>
-        <List
-          delay={0.8}
-          items={[
-            "Fixes failing automated checks (CI)",
-            "Updates it when the main branch has moved on",
-            "Replies to every review comment",
-            "Re-runs flaky checks instead of changing code",
-          ]}
-        />
+        <Code className="w-[84%]" delay={0.7} label="skills/pr-babysitter/SKILL.md">
+          {`- [ ] Phase 1: Initialize (detect PR, pick watch mechanism, snapshot state)
+- [ ] Phase 2: Conflict check
+- [ ] Phase 3: CI check (diagnose, fix, gate, push)
+- [ ] Phase 4: Comment check (triage new comments)
+- [ ] Phase 5: Readiness check (report transitions, write state file)
+- [ ] After merge: post-merge watch, then a read-only production smoke test`}
+        </Code>
+        <Line className="max-w-[52ch] text-[var(--fg)] slide-text-2xl" delay={1.2}>
+          “Two identical failures is the signal to stop pushing, not to try a third variant.”
+        </Line>
       </Frame>
     </SlideContainer>
   );
 }
 
-// lefthook.yml and CI in donebear and this repo.
+// lefthook.yml and .github/workflows/ci.yml in this repo, comments and setup
+// steps left out. The test-before-push rule is a hook in my Claude settings.
 export function SlideGates() {
   return (
     <SlideContainer palette="e">
-      <Frame className="justify-center gap-[var(--slide-space-10)]">
+      <Frame className="justify-center gap-[var(--slide-space-8)]">
         <div className="flex flex-col gap-[var(--slide-space-4)]">
           <Display size="2xl">The checks catch broken code</Display>
           <Line className="max-w-none slide-text-3xl" delay={0.3}>
-            Automatic checks that run before any code can land.
+            This deck’s own gates. Two files, and nothing lands without them.
           </Line>
         </div>
-        <Terminal
-          className="w-[80%]"
-          delay={0.5}
-          lines={[
-            {
-              key: "commit",
-              content: (
-                <span>
-                  <span style={{ color: ACCENT }}>on commit</span> format (oxfmt) and lint (oxlint)
-                  the changed files
-                </span>
-              ),
-            },
-            {
-              key: "push",
-              content: (
-                <span>
-                  <span style={{ color: ACCENT }}>on push</span> run the same checks as CI
-                </span>
-              ),
-            },
-            {
-              key: "ci",
-              content: (
-                <span>
-                  <span style={{ color: ACCENT }}>in CI</span> lint, format, types, build
-                </span>
-              ),
-            },
-            {
-              key: "tests",
-              content: (
-                <span>
-                  <span style={{ color: ACCENT }}>tests</span> once, right before the push
-                </span>
-              ),
-            },
-          ]}
-        />
-        <Line className="max-w-none slide-text-3xl" delay={1.2}>
-          Checks catch broken code, not too much code. /tidy handles that.
+        <div className="grid grid-cols-2 gap-[var(--slide-space-6)]">
+          <Code delay={0.5} label="lefthook.yml">
+            <Hi>pre-commit:</Hi>
+            {`
+  parallel: true
+  jobs:
+    - name: oxfmt
+      run: npx oxfmt --write {staged_files}
+      stage_fixed: true
+    - name: oxlint
+      run: npx oxlint --fix {staged_files}
+      stage_fixed: true`}
+          </Code>
+          <Code delay={0.7} label=".github/workflows/ci.yml">
+            <Hi>steps:</Hi>
+            {`
+  - run: npm ci
+  - run: npm run lint
+  - run: npm run format:check
+  - run: npm run check-types
+  - run: npm run build
+  - name: Capture and check slides
+    run: node scripts/verify-slides.mjs`}
+          </Code>
+        </div>
+        <Line className="max-w-none slide-text-2xl" delay={1.2}>
+          Tests run once, right before the push. Checks catch broken code, not too much code: /tidy
+          handles that.
         </Line>
       </Frame>
     </SlideContainer>
   );
 }
 
-const REPO = [
-  { name: "Monorepo", body: "Every app in one repo, sharing the same config." },
-  { name: "AGENTS.md", body: "A README for agents: commands, layout and rules." },
-  { name: "README", body: "What it is and how to run it, for people." },
-  { name: "Skills", body: "Checklists the agent loads for one kind of job." },
-] as const;
+// The Verification section of this repo's AGENTS.md, and what
+// scripts/verify-slides.mjs does.
+export function SlideProve() {
+  return (
+    <SlideContainer palette="e">
+      <Frame className="justify-center gap-[var(--slide-space-8)]">
+        <div className="flex flex-col gap-[var(--slide-space-4)]">
+          <Display className="max-w-[18ch]" size="2xl">
+            Give the agent a way to prove it
+          </Display>
+          <Line className="max-w-none slide-text-3xl" delay={0.4}>
+            This deck has no tests, so its AGENTS.md names a script that does the looking.
+          </Line>
+        </div>
+        <Code className="w-[88%]" delay={0.7} label="AGENTS.md, Verification">
+          {"A change is proven by\n  "}
+          <Hi>npm run lint && npm run format:check && npm run check-types && npm run build</Hi>
+          {"\nthen\n  "}
+          <Hi>node scripts/verify-slides.mjs</Hi>
+          {
+            "\nwhich serves the build, fires every reveal and fails on any text\noverflowing the slide (screenshots in out/slide-review/)."
+          }
+        </Code>
+        <Line className="max-w-none slide-text-2xl" delay={1.2}>
+          CI runs it too, so an agent can’t call a slide done without rendering it.
+        </Line>
+      </Frame>
+    </SlideContainer>
+  );
+}
 
+// Lines from this repo's AGENTS.md: three of its commands, one convention and
+// the add-a-slide rule.
 export function SlideRepo() {
   return (
     <SlideContainer palette="e">
-      <Frame className="justify-center gap-[var(--slide-space-12)]">
-        <Display className="max-w-[16ch]" size="2xl">
-          Write the repo for the agent
-        </Display>
-        <Line className="max-w-none slide-text-3xl" delay={0.3}>
-          Agents start every task with no memory. The repo has to explain itself.
+      <Frame className="justify-center gap-[var(--slide-space-8)]">
+        <div className="flex flex-col gap-[var(--slide-space-4)]">
+          <Display size="2xl">Write the repo for the agent</Display>
+          <Line className="max-w-none slide-text-3xl" delay={0.3}>
+            Agents start every task with no memory. This is what this deck’s repo tells them.
+          </Line>
+        </div>
+        <Code className="w-[88%]" delay={0.6} label="AGENTS.md">
+          <Hi>## Commands</Hi>
+          {`
+npm run lint          # oxlint .
+npm run check-types   # tsc --noEmit
+npm run build         # production build
+
+`}
+          <Hi>## Layout</Hi>
+          {`
+To add a slide: add an entry to SLIDES, write the component, and add it
+to slideComponents under its slug.
+
+`}
+          <Hi>## Conventions</Hi>
+          {`
+Icons come from blode-icons-react. lucide-react imports fail lint.`}
+        </Code>
+        <Line className="max-w-none slide-text-2xl" delay={1.1}>
+          Commands, layout, rules. The rules that stick are the ones a check enforces.
         </Line>
-        <Cells columns={4} delay={0.7} items={REPO} />
       </Frame>
     </SlideContainer>
   );
@@ -811,6 +915,13 @@ export function SlideSkills() {
   );
 }
 
+// What I asked the chat-history skill for this deck, and what it counted.
+const HISTORY_ASKS = [
+  { ask: "How many Claude Code chats in 30 days?", answer: "1,694" },
+  { ask: "Which skill did I call most?", answer: "tidy, 327" },
+  { ask: "How many P1s did Codex raise?", answer: "62" },
+] as const;
+
 // The chat-history skill. Every number in this deck came from it.
 export function SlideHistory() {
   return (
@@ -823,6 +934,22 @@ export function SlideHistory() {
           Every chat with an agent is saved on your machine. /chat-history searches them when you
           think, “we fixed this before”.
         </Line>
+        <div className="flex w-[70%] flex-col">
+          {HISTORY_ASKS.map((row, index) => (
+            <Enter
+              as="div"
+              className="grid grid-cols-[1fr_auto] items-baseline gap-[var(--slide-space-6)] border-t border-[var(--hairline)] py-[var(--slide-space-3)] slide-text-2xl"
+              delay={0.8 + index * 0.15}
+              from={LIFT}
+              key={row.ask}
+            >
+              <span className="font-mono">{row.ask}</span>
+              <span className="tabular-nums" style={{ color: ACCENT }}>
+                {row.answer}
+              </span>
+            </Enter>
+          ))}
+        </div>
         <Reveal>
           <Line className="max-w-none text-[var(--fg)] slide-text-4xl" delay={0}>
             Every number in this talk came from it.
@@ -842,9 +969,9 @@ export function SlideClose() {
           <List
             delay={0.5}
             items={[
-              "Save your best prompt as a snippet",
-              "Ask for a plan before any code",
-              "Let an agent see one pull request through to merge",
+              "Copy zcc, zep and zgp into a text expander",
+              "Add a verification command to your AGENTS.md",
+              "Run /pr-babysitter on your next pull request",
             ]}
           />
           <Enter as="div" delay={1.2} from={LIFT}>

@@ -2,7 +2,7 @@
 
 # [How I use AI](https://blode.co/ai-workflow)
 
-**A talk by Matthew Blode at Linktree, 13 November 2026**
+**A talk by Matthew Blode at Mark My Words, 13 November 2026**
 
 Three prompt snippets, the flow from plan to merged PR, a fleet of parallel agents, and the gates that keep it safe.
 
