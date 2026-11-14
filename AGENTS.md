@@ -1,6 +1,6 @@
 # ai-workflow
 
-The slide deck for Matthew Blode's talk "How I use AI" (Sharing AI tools and workflow, a 20-minute internal session at Linktree on 13 November 2026). Copied from the `you-have-taste` deck on 13 November 2026. A Next.js 16 app served as a zone at <https://blode.co/ai-workflow>: `basePath` and `assetPrefix` are `/ai-workflow`, and each slide is its own URL (`/ai-workflow/6`).
+The slide deck for Matthew Blode's talk "How I use AI" (Sharing AI tools and workflow, a 20-minute internal session at Mark My Words on 13 November 2026). Copied from the `you-have-taste` deck on 13 November 2026. A Next.js 16 app served as a zone at <https://blode.co/ai-workflow>: `basePath` and `assetPrefix` are `/ai-workflow`, and each slide is its own URL (`/ai-workflow/6`).
 
 ## Commands
 

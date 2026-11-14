@@ -1,11 +1,11 @@
 export type Palette = "a" | "b" | "c" | "d" | "e";
 
-// Sharing AI tools and workflow, Linktree, 13 November 2026: what changed
-// since May, the flow from plan to merged PR, and what keeps it safe.
+// Sharing AI tools and workflow, Mark My Words, 13 November 2026: the real
+// prompts, files and checks that take a ticket from plan to merged PR.
 // Every slide sits on the one dark ground (e).
 export const SLIDES = [
   { slug: "intro", title: "How I use AI", palette: "e" },
-  { slug: "since-may", title: "Since May", palette: "e" },
+  { slug: "numbers", title: "30 days, by the numbers", palette: "e" },
   { slug: "setup", title: "My setup", palette: "e" },
   { slug: "yolo", title: "Let it work. Guard the edges.", palette: "e" },
   { slug: "snippets", title: "Three keystrokes", palette: "e" },
@@ -17,6 +17,7 @@ export const SLIDES = [
   { slug: "rubric", title: "Write down done first", palette: "e" },
   { slug: "babysit", title: "Open isn’t done", palette: "e" },
   { slug: "gates", title: "The checks catch broken code", palette: "e" },
+  { slug: "prove", title: "Give the agent a way to prove it", palette: "e" },
   { slug: "repo", title: "Write the repo for the agent", palette: "e" },
   { slug: "ladder", title: "Lazy, not negligent", palette: "e" },
   { slug: "matt-mode", title: "Write your working style down", palette: "e" },
@@ -34,4 +35,4 @@ export const TOTAL_SLIDES = SLIDES.length;
 export const DECK_TITLE = "How I use AI";
 
 export const DECK_SUMMARY =
-  "Matthew Blode's AI workflow: three prompt snippets, plan to merged PR, parallel agents, and the gates that keep it safe.";
+  "Matthew Blode's AI workflow, shown as the real prompts, files and checks: three snippets, plan to merged PR, parallel agents, and the gates that keep it safe.";
